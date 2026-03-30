@@ -56,29 +56,22 @@ class NonMemberUITests(StaticLiveServerTestCase):
                 options.add_argument("--headless=new")
                 options.add_argument("--window-size=1920,1080")
 
-            # CI stability flags
+            # Required for GitHub Actions stability
             options.add_argument("--no-sandbox")
             options.add_argument("--disable-dev-shm-usage")
-
-            # Additional stability flags
             options.add_argument("--disable-gpu")
-            options.add_argument("--disable-software-rasterizer")
-            options.add_argument("--remote-debugging-port=9222")
 
-            # Explicit Chrome binary path
-            options.binary_location = "/usr/bin/google-chrome"
+            # DO NOT set binary location unless needed
+            # DO NOT use Service()
+            # Let Selenium Manager handle everything
 
-            # Chromedriver path
-            service = Service("/usr/bin/chromedriver")
-
-            cls.driver = webdriver.Chrome(service=service, options=options)
+            cls.driver = webdriver.Chrome(options=options)
 
             cls.driver.implicitly_wait(10)
 
         except Exception as e:
             print("SETUPCLASS FAILED:", e)
             raise
-            
 
 
     @classmethod
