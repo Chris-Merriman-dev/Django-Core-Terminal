@@ -49,34 +49,34 @@ class NonMemberUITests(StaticLiveServerTestCase):
         try:
             super().setUpClass()
 
-            # Force headless mode in CI
-            if os.environ.get("GITHUB_ACTIONS") == "true" or HEADLESS:
-                os.environ["MOZ_HEADLESS"] = "1"
-
             options = Options()
 
+            # Headless mode for CI
             if os.environ.get("GITHUB_ACTIONS") == "true" or HEADLESS:
-                options.add_argument("--headless")
-                options.add_argument("--width=1920")
-                options.add_argument("--height=1080")
+                options.add_argument("--headless=new")  # modern headless mode
+                options.add_argument("--window-size=1920,1080")
 
-                # CI stability flags
-                options.add_argument("--no-sandbox")
-                options.add_argument("--disable-dev-shm-usage")
+            # CI stability flags
+            options.add_argument("--no-sandbox")
+            options.add_argument("--disable-dev-shm-usage")
 
-            # Explicit Firefox binary path (important on Ubuntu runners)
-            options.binary_location = "/usr/bin/firefox"
+            # Optional but helpful in CI environments
+            options.add_argument("--disable-gpu")
 
-            service = Service("/usr/local/bin/geckodriver")
+            # Explicit Chrome binary path (usually not required, but safe in CI)
+            options.binary_location = "/usr/bin/google-chrome"
 
-            cls.driver = webdriver.Firefox(service=service, options=options)
+            # Chromedriver path (you'll install this in CI)
+            service = Service("/usr/bin/chromedriver")
+
+            cls.driver = webdriver.Chrome(service=service, options=options)
 
             cls.driver.implicitly_wait(10)
 
         except Exception as e:
             print("SETUPCLASS FAILED:", e)
             raise
-        
+            
 
 
     @classmethod
