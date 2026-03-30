@@ -87,6 +87,50 @@ class NonMemberUITests(StaticLiveServerTestCase):
     def login(self, CREATE_USER: bool = True, username: str = "testuser", password: str = "testpassword123", access_level: int = 1) -> Any:
         if CREATE_USER:
             User = get_user_model()
+            # USE get_or_create to prevent IntegrityErrors if a previous test leaked data
+            new_user, created = User.objects.get_or_create(username=username)
+            new_user.set_password(password) # Always reset password to be sure
+            new_user.access_level = access_level
+            new_user.save()
+        else:
+            new_user = None
+
+        # 1. CLEAN SLATE: This is mandatory for sequential Selenium tests
+        self.driver.delete_all_cookies() 
+        self.driver.get(self.live_server_url + reverse('login'))
+        
+        wait = WebDriverWait(self.driver, 15)
+        
+        # 2. Form Handling - Ensure fields are clear
+        user_field = wait.until(EC.element_to_be_clickable((By.NAME, "username")))
+        user_field.clear()
+        user_field.send_keys(username)
+        
+        pass_field = self.driver.find_element(By.NAME, "password")
+        pass_field.clear()
+        pass_field.send_keys(password)
+        
+        # 3. Submit
+        login_btn = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[value='Login']")))
+        # Use a standard click to ensure the browser registers the action properly
+        login_btn.click() 
+        
+        # 4. Verification
+        try:
+            wait.until(EC.url_contains('/dashboard'))
+        except TimeoutException:
+            # If we are stuck on /login, find out if there's a Django error message
+            actual_url = self.driver.current_url
+            page_text = self.driver.find_element(By.TAG_NAME, "body").text
+            # This will show up in your GitHub Actions log to tell us WHY it failed
+            print(f"\n[DEBUG] Login Failed. Page Content Snippet: {page_text[:200]}")
+            raise TimeoutException(f"Login redirect failed. Ended up at: {actual_url}")
+
+        return new_user
+
+    def login7(self, CREATE_USER: bool = True, username: str = "testuser", password: str = "testpassword123", access_level: int = 1) -> Any:
+        if CREATE_USER:
+            User = get_user_model()
             new_user = User.objects.create_user(
                 username=username, 
                 password=password,
