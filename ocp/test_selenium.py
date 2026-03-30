@@ -99,7 +99,8 @@ class NonMemberUITests(StaticLiveServerTestCase):
     ) -> Any:
 
         
-
+        self.driver.delete_all_cookies()
+        self.driver.get("about:blank")
 
 
         # -------------------------
