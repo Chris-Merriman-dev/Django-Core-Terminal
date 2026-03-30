@@ -70,7 +70,7 @@ class NonMemberUITests(StaticLiveServerTestCase):
             cls.driver.implicitly_wait(10)
         except Exception as e:
             print("SETUPCLASS FAILED:", e)
-        raise
+            raise
         
 
 
