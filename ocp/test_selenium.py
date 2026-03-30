@@ -23,7 +23,7 @@ from selenium.webdriver.support.ui import WebDriverWait, Select
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
 #from selenium.webdriver.firefox.service import Service
 #from webdriver_manager.firefox import GeckoDriverManager
@@ -85,9 +85,64 @@ class NonMemberUITests(StaticLiveServerTestCase):
         Helper Functions
     '''
 
+    def login(self, CREATE_USER: bool = True, username: str = "testuser", password: str = "testpassword123", access_level: int = 1) -> Any:
+        if CREATE_USER:
+            User = get_user_model()
+            new_user = User.objects.create_user(
+                username=username, 
+                password=password,
+                access_level=access_level
+            )
+        else:
+            new_user = None
+
+        # 1. Force navigation and wait for body to ensure page is ready
+        self.driver.get(self.live_server_url + reverse('index'))
+        wait = WebDriverWait(self.driver, 15)
+        wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
+
+        # 2. Open the dropdown with a retry logic
+        # Sometimes the first click is ignored if the JS hasn't bound to the button yet
+        dropdown_opened = False
+        for _ in range(3):
+            try:
+                trigger = wait.until(EC.element_to_be_clickable((By.ID, "signInDropDown")))
+                self.driver.execute_script("arguments[0].click();", trigger)
+                # Check if a dropdown item becomes visible
+                wait.until(EC.visibility_of_element_located((By.CLASS_NAME, "dropdown-item")))
+                dropdown_opened = True
+                break
+            except:
+                self.driver.refresh() # Refresh and try again if it fails
+                continue
+        
+        if not dropdown_opened:
+             raise TimeoutException("Failed to open Sign In dropdown after 3 attempts")
+
+        # 3. Find and click Sign In
+        sign_in_link = wait.until(EC.element_to_be_clickable((By.XPATH, "//a[contains(@class, 'dropdown-item') and contains(text(), 'Sign In')]")))
+        self.driver.execute_script("arguments[0].click();", sign_in_link)
+
+        # 4. Form handling
+        user_field = wait.until(EC.presence_of_element_located((By.NAME, "username")))
+        user_field.clear()
+        user_field.send_keys(username)
+        
+        pass_field = self.driver.find_element(By.NAME, "password")
+        pass_field.clear()
+        pass_field.send_keys(password)
+        
+        login_btn = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[value='Login']")))
+        self.driver.execute_script("arguments[0].click();", login_btn)
+        
+        # 5. Wait for redirect
+        wait.until(EC.url_contains('/dashboard'))
+
+        return new_user
+
     # This will login the user by sending in a username, password, and access_level
     # Will return the created user to use
-    def login(self, CREATE_USER: bool = True, username: str = "testuser", password: str = "testpassword123", access_level: int = 1) -> Any:
+    def login3(self, CREATE_USER: bool = True, username: str = "testuser", password: str = "testpassword123", access_level: int = 1) -> Any:
         
         if CREATE_USER:
             # Create a temporary user in the test database
