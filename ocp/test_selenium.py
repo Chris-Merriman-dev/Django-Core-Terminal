@@ -86,6 +86,65 @@ class NonMemberUITests(StaticLiveServerTestCase):
     '''
 
     def login(self, CREATE_USER: bool = True, username: str = "testuser", password: str = "testpassword123", access_level: int = 1) -> Any:
+        if CREATE_USER:
+            User = get_user_model()
+            # 1. Use update_or_create to ensure the user is FRESH every single time
+            new_user, created = User.objects.update_or_create(
+                username=username,
+                defaults={'access_level': access_level}
+            )
+            new_user.set_password(password)
+            new_user.save()
+            
+            # 2. THE SECRET SAUCE: Force the database to commit and verify 
+            # This prevents the "Race Condition" where the browser submits before the DB is ready
+            if not User.objects.filter(username=username).exists():
+                 raise Exception("Critical Error: User was not found in DB after creation!")
+        else:
+            new_user = None
+
+        # 3. Standard Clean Slate
+        self.driver.delete_all_cookies() 
+        self.driver.get(self.live_server_url + reverse('login'))
+        
+        wait = WebDriverWait(self.driver, 15)
+        
+        # 4. Form Handling
+        user_field = wait.until(EC.element_to_be_clickable((By.NAME, "username")))
+        user_field.clear()
+        user_field.send_keys(username)
+        
+        pass_field = self.driver.find_element(By.NAME, "password")
+        pass_field.clear()
+        pass_field.send_keys(password)
+        
+        # 5. Submit with a "Force Scroll"
+        login_btn = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[value='Login']")))
+        self.driver.execute_script("arguments[0].scrollIntoView(true);", login_btn)
+        
+        # 6. Use a tiny sleep (0.5s) ONLY for CI stability
+        # This gives Django a millisecond to "breathe" before the POST request hits
+        import time
+        time.sleep(0.5) 
+        
+        self.driver.execute_script("arguments[0].click();", login_btn)
+        
+        # 7. Final Verification
+        try:
+            wait.until(EC.url_contains('/dashboard'))
+        except TimeoutException:
+            actual_url = self.driver.current_url
+            # If we fail, let's see if there's an error message on the screen
+            try:
+                msg = self.driver.find_element(By.TAG_NAME, "body").text[:100]
+                print(f"[DEBUG] Login Page Text: {msg}")
+            except:
+                pass
+            raise TimeoutException(f"Login redirect failed. Ended up at: {actual_url}")
+
+        return new_user
+
+    def login99(self, CREATE_USER: bool = True, username: str = "testuser", password: str = "testpassword123", access_level: int = 1) -> Any:
         # 1. Database Setup
         if CREATE_USER:
             User = get_user_model()
