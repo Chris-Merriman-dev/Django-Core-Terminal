@@ -1,0 +1,83 @@
+{% extends "ocp/base/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <div class="header-about">
+        <h1>CLEARANCE MANAGEMENT TERMINAL</h1>
+    </div>
+
+    <div class="page-wrapper">
+        <div class="page-content security-container">
+            <div class="terminal-box">
+                <div class="terminal-header">
+                    <span class="system-tag">SYSTEM: SECURE_AUTH_v4.2</span>
+                    <span class="access-tag">OPERATOR: {{ user.username|upper }} (LEVEL {{ user.access_level }})</span>
+                </div>
+
+                <div class="terminal-search-bar">
+                    <label for="personnelSearch" class="label">FILTER IDENTIFIER:</label>
+                    <input type="text" id="personnelSearch" placeholder="ENTER USERNAME..." autocomplete="off">
+                </div>
+
+                <div class="table-scroller">
+                    <table class="personnel-table" id="personnelTable">
+                        <thead>
+                            <tr>
+                                <th>EMPLOYEE ID</th>
+                                <th>IDENTIFIER</th>
+                                <th>CURRENT CLEARANCE</th>
+                                <th>ACTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for p in users %}
+                            <tr class="personnel-row {% if p.access_level >= 4 %}high-value{% endif %}">
+                                <td class="tech-id">#{{ p.employee_id }}</td>
+                                <td class="username"><a href="{% url 'user_profile' p.id %}">{{ p.username|upper }}</a></td>
+                                <td>
+                                    <span class="level-badge level-{{ p.access_level }}">
+                                        {{ p.get_access_level_display|upper }}
+                                    </span>
+                                </td>
+                                <td>
+                                    {% if p.access_level < user.access_level %}
+                                        <form method="POST" action="{% url 'update_access' p.id %}" class="access-form" onsubmit="return confirm('Confirm Clearance Modification for {{ p.username }}?');">
+                                            {% csrf_token %}
+                                            <select name="new_level" class="ocp-select">
+                                                {% for level_num, level_name in p.CLEARANCE_CHOICES %}
+                                                    {% if level_num < user.access_level %}
+                                                        <option value="{{ level_num }}" {% if p.access_level == level_num %} selected {% endif %}>
+                                                            SET: {{ level_name|upper }}
+                                                        </option>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </select>
+                                            <button type="submit" class="update-btn">REAUTHORIZE</button>
+                                        </form>
+                                    {% else %}
+                                        <span class="status-locked">
+                                            <i class="fas fa-lock"></i> INSUFFICIENT PRIVILEGE
+                                        </span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="4" style="text-align:center; padding: 40px; color: #444;">
+                                    NO PERSONNEL DATA RETRIEVED FROM DATABASE.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div class="terminal-footer">
+                    <p>OFFICIAL USE ONLY. UNAUTHORIZED MODIFICATIONS ARE SUBJECT TO TERMINATION.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'ocp/js/security_settings.js' %}"></script>
+{% endblock %}

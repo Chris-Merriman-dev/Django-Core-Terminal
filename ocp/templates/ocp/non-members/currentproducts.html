@@ -1,0 +1,40 @@
+{% extends "ocp/base/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <div class="header-about">
+        <h1>CURRENT PRODUCT LINEUP</h1>
+    </div>
+
+    <div class="page-wrapper">
+        <div class="standard-banner">
+            <img src="{% static 'ocp/images/ed209-1.png' %}" alt="ED-209" class="standard-image">
+            <div class="image-caption">ENFORCEMENT DROID SERIES 209</div>
+        </div>
+
+        <div class="page-content">
+            <h2 class="page-title">THE FUTURE OF LAW ENFORCEMENT</h2>
+            
+            <p class="page-lead">
+                The Enforcement Droid Series 209 (ED-209) is the ultimate solution in urban pacification. 
+                Designed for high-stress combat environments and metropolitan patrol, ED-209 offers 
+                unrivaled firepower and a 24-hour tactical presence that never tires.
+            </p>
+
+            <div class="section-label">TECHNICAL SPECIFICATIONS:</div>
+            <ul class="standard-list">
+                <li><strong>Heavy Armament:</strong> Twin 20mm cannons and integrated rocket launcher.</li>
+                <li><strong>Neural Net Processor:</strong> Advanced logic for autonomous decision-making.</li>
+                <li><strong>Durability:</strong> Reinforced titanium alloy plating resistant to small arms fire.</li>
+                <li><strong>Adaptive Terrain Logic:</strong> Fully functional in urban and industrial sectors.</li>
+            </ul>
+
+            <div class="standard-quote-box">
+                <p>"The ED-209 doesn't just enforce the law; it creates a zone of absolute compliance."</p>
+                <span class="quote-source">— OCP Security Concepts Division</span>
+            </div>
+
+            <p class="standard-footer">Now available for municipal contract. Contact an OCP representative for procurement details.</p>
+        </div>
+    </div>
+{% endblock %}

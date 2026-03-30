@@ -1,0 +1,39 @@
+{% extends "ocp/base/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <div class="header-about">
+        <h1>CAREERS AT OCP</h1>
+    </div>
+
+    <div class="page-wrapper">
+        <div class="standard-banner">
+            <img src="{% static 'ocp/images/employee-of-month1.png' %}" alt="Employee of the Month" class="standard-image">
+            <div class="image-caption">RECOGNIZING EXCELLENCE: DONALD JOHNSON - VICE PRESIDENT</div>
+        </div>
+
+        <div class="page-content">
+            <h2 class="page-title">JOIN THE ARCHITECTS OF TOMORROW</h2>
+            
+            <p class="page-lead">
+                At Omni Consumer Products, we don't just offer jobs; we offer the chance to manage the future. 
+                Our team is comprised of the brightest minds in robotics, urban planning, and civil pacification.
+            </p>
+
+            <div class="section-label">OPEN OPPORTUNITIES:</div>
+            <ul class="standard-list">
+                <li><strong>Security Concepts:</strong> Engineering the next generation of urban peacekeepers.</li>
+                <li><strong>Metropolitan Management:</strong> Overseeing the transition of Sector 7 to Delta City standards.</li>
+                <li><strong>Executive Track:</strong> High-stakes corporate leadership with unparalleled benefits.</li>
+                <li><strong>Logistics & Support:</strong> Maintaining the infrastructure that powers a global superpower.</li>
+            </ul>
+
+            <div class="standard-quote-box">
+                <p>"OCP is a family. And like any family, we reward those who are willing to sacrifice for the greater good of the company."</p>
+                <span class="quote-source">— OCP HUMAN RESOURCES DIVISION</span>
+            </div>
+
+            <p class="standard-footer">Omni Consumer Products is an equal opportunity employer. All applicants are subject to mandatory corporate loyalty screening.</p>
+        </div>
+    </div>
+{% endblock %}

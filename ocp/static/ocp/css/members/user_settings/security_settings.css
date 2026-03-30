@@ -1,0 +1,163 @@
+.security-container {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.terminal-box {
+    width: 100%;
+    max-width: 1000px;
+    background: #050505;
+    border: 1px solid #00a2ff;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0, 162, 255, 0.1);
+}
+
+.terminal-header {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid #00a2ff;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    font-size: 0.7rem;
+    color: #00a2ff;
+    letter-spacing: 2px;
+}
+
+/* Table Styling */
+.personnel-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.personnel-table th {
+    text-align: left;
+    color: #00a2ff;
+    font-size: 0.8rem;
+    padding: 10px;
+    border-bottom: 2px solid #222;
+}
+
+.personnel-table td {
+    padding: 12px 10px;
+    border-bottom: 1px solid #111;
+    font-size: 0.9rem;
+}
+
+.tech-id { color: #555; }
+.username { color: #fff; font-weight: bold; }
+
+/* Level Badges */
+.level-badge {
+    font-size: 0.75rem;
+    padding: 2px 6px;
+    border: 1px solid transparent;
+}
+.level-1 { color: #888; }
+.level-2 { color: #00a2ff; }
+.level-5 { color: #ff0000; border-color: #ff0000; }
+
+/* Form Elements */
+.access-form {
+    display: flex;
+    gap: 10px;
+}
+
+.ocp-select {
+    background: #000;
+    border: 1px solid #444;
+    color: #00a2ff;
+    font-family: inherit;
+    font-size: 0.75rem;
+    padding: 4px;
+}
+
+.update-btn {
+    background: #00a2ff;
+    color: #000;
+    border: none;
+    font-size: 0.7rem;
+    font-weight: bold;
+    padding: 4px 10px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.update-btn:hover {
+    background: #fff;
+    box-shadow: 0 0 10px #00a2ff;
+}
+
+.status-locked {
+    font-size: 0.7rem;
+    color: #444;
+    font-style: italic;
+    letter-spacing: 1px;
+}
+
+.terminal-footer {
+    margin-top: 30px;
+    font-size: 0.65rem;
+    color: #333;
+    text-align: center;
+}
+
+/* High Value Target Row */
+.high-value {
+    background: rgba(255, 0, 0, 0.02);
+}
+
+/* Search Bar Styling */
+.terminal-search-bar {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    background: rgba(0, 162, 255, 0.05);
+    padding: 10px;
+    border: 1px solid #111;
+}
+
+#personnelSearch {
+    background: #000;
+    border: 1px solid #00a2ff;
+    color: #fff;
+    padding: 5px 10px;
+    font-family: 'Courier New', Courier, monospace;
+    flex-grow: 1;
+    outline: none;
+}
+
+#personnelSearch:focus {
+    box-shadow: 0 0 10px rgba(0, 162, 255, 0.3);
+}
+
+/* Scrollable Table Container */
+.table-scroller {
+    max-height: 500px; /* Adjust height as needed */
+    overflow-y: auto;
+    border: 1px solid #1a1a1a;
+}
+
+/* Custom Scrollbar for OCP Theme */
+.table-scroller::-webkit-scrollbar {
+    width: 8px;
+}
+.table-scroller::-webkit-scrollbar-track {
+    background: #050505;
+}
+.table-scroller::-webkit-scrollbar-user {
+    background: #222;
+}
+.table-scroller::-webkit-scrollbar-thumb {
+    background: #00a2ff;
+}
+
+/* Ensure the header stays visible while scrolling */
+.personnel-table thead th {
+    position: sticky;
+    top: 0;
+    background: #050505;
+    z-index: 10;
+}

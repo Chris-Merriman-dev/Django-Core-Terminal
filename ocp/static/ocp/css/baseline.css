@@ -1,0 +1,147 @@
+/*
+    Created By : Christian Merriman
+    Purpose : This is used for loading all the different css files for our django frontend.
+*/
+/* our import individual page styles */
+@import url("base/index.css");
+@import url("non-members/mission.css");
+@import url("non-members/about.css");
+@import url("non-members/currentproducts.css");
+@import url("non-members/comingsoon.css");
+@import url("non-members/employment.css");
+@import url("base/standard-page-outline.css");
+@import url("members/dashboard.css");
+@import url("members/directives/chat.css");
+@import url("members/directives/image_creation.css");
+@import url("members/grid/assetfeed.css");
+@import url("members/user_settings/user_profile.css");
+@import url("members/user_settings/security_settings.css");
+
+/* global Site Theme */
+body {
+    background-color: #050505; /* deep black for the whole site */
+    color: #e0e0e0;
+    padding: 10px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.header1 {
+    margin-left: 10px;
+}
+
+@media (max-width: 576px) {
+    .ocp-navbar .nav-link {
+        margin: 0 5px;
+        font-size: 0.75rem; 
+    }
+}
+
+/* --- Navigation Bar --- */
+.ocp-navbar {
+    background-color: #0a0a0a !important; 
+    border-bottom: 2px solid #00a2ff; 
+    padding: 0.5rem 2rem; 
+}
+
+.nav-logo {
+    height: 40px; 
+    width: auto;
+    display: inline-block;
+    vertical-align: middle;
+    transition: filter 0.3s ease-in-out;
+}
+
+.ocp-navbar .navbar-brand {
+    padding: 0;
+    margin-right: 20px;
+}
+
+.ocp-navbar .navbar-brand:hover .nav-logo {
+    filter: drop-shadow(0 0 10px rgba(0, 162, 255, 0.9));
+}
+
+.ocp-navbar .nav-link {
+    color: #00a2ff !important; 
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin: 0 10px;
+    transition: all 0.2s ease-in-out;
+}
+
+.ocp-navbar .nav-link:hover {
+    color: #ffffff !important;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+}
+
+.navbar-text {
+    color: #00a2ff;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    border: 1px solid #00a2ff;
+    padding: 8px 12px;
+    border-radius: 2px; 
+    background-color: rgba(0, 162, 255, 0.05);
+}
+
+.body {
+    margin-top: 20px;
+}
+
+.banner-wrapper {
+    display: flex;
+    justify-content: center; 
+    align-items: center;     
+    width: 100%;             
+}
+
+.nav-banner {
+    width: auto;
+    height: 240px;
+}
+
+/* OCP dropdow styles */
+.ocp-dropdown {
+    background-color: #0a0a0a;
+    border: 1px solid #00a2ff;
+    border-radius: 0; 
+    margin-top: 10px;
+}
+
+.ocp-dropdown .dropdown-item {
+    color: #00a2ff;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.ocp-dropdown .dropdown-item:hover {
+    background-color: #00a2ff;
+    color: #ffffff;
+}
+
+.ocp-dropdown .dropdown-divider {
+    border-top: 1px solid #004466;
+}
+
+.dropdown-toggle::after {
+    color: #00a2ff;
+}
+
+/* image styling  */
+.image-holder{
+    width: 100%;
+    margin-bottom: 20px;
+    border: 2px solid #00a2ff;
+    padding: 10px;
+    background-color: #000000;
+}
+
+.image-holder-image {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: contrast(1.1);
+}

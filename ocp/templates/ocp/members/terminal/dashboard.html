@@ -1,0 +1,52 @@
+{% extends "ocp/base/layout.html" %}
+{% load static %}
+
+{% block body %}
+<div class="page-wrapper">
+    <div class="page-content">
+        <h1 class="page-title">OCP DASHBOARD</h1>
+        
+        <div class="user-stats-bar">
+            <span>USER: <strong>{{ user.username|upper }}</strong></span>
+            <span>ID: <strong>{{ user.employee_id }}</strong></span>
+            <span>CLEARANCE: <strong>{{ user.get_access_level_display }}</strong></span>
+        </div>
+
+        <div class="dashboard-grid">
+            <a href="{% url 'user_profile' user.id %}" class="dash-card">
+                <span class="card-label">SYSTEM</span>
+                <span class="card-title">USER PROFILE</span>
+            </a>
+
+            <a href="{% url 'assetfeed' %}" class="dash-card">
+                <span class="card-label">DATABASE</span>
+                <span class="card-title">PUBLIC ACCESS FEED</span>
+            </a>
+
+            <a href="{% url 'chat' %}" class="dash-card blue-accent">
+                <span class="card-label">COMMUNICATION</span>
+                <span class="card-title">ED-209 CHAT INTERFACE</span>
+            </a>
+
+            <a href="{% url 'image_creation' %}" class="dash-card blue-accent">
+                <span class="card-label">OPERATIONS</span>
+                <span class="card-title">ED-209 IMAGE GENERATOR</span>
+            </a>
+
+            {% if user.access_level >= 4 %}
+                <a href="{% url 'security_settings' %}" class="dash-card red-accent">
+                    <span class="card-label">ADMINISTRATIVE</span>
+                    <span class="card-title">SECURITY SETTINGS</span>
+                </a>
+            {% endif %}
+        </div>
+
+        <section class="standard-quote-box">
+            "The future is a privilege, not a right."
+            <span class="quote-source">OFFICE OF THE CHAIRMAN</span>
+        </section>
+
+        <p class="standard-footer">Authorized personnel only. Your activity is being monitored by Omni Consumer Products.</p>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends "ocp/base/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <div class="page-wrapper">
+        
+        <div class="ed-chat-container">
+            <header class="ed-chat-page-title">
+                <h1>ED-209 Chat Interface. Clearance {{user.get_access_level_display}}</h1>
+            </header>
+
+            <div class="ed-chat-status-bar">
+                <span class="ed-chat-status-label">ED-209 CHAT:</span>
+                <span id="ed-chat-connection-status" class="ed-chat-status-indicator offline">OFFLINE</span>
+            </div>
+
+            <div id="ed-chat-display-id" class="ed-chat-display">
+     
+            </div>
+
+            <div class="ed-chat-input-area">
+                <input type="text" id="ed-chat-user-input" placeholder="Communicate with ED-209 here..." autocomplete="off">
+                <button id="ed-chat-send-btn">Send</button>
+            </div>
+
+        </div>
+
+    </div>
+
+
+{% endblock %}

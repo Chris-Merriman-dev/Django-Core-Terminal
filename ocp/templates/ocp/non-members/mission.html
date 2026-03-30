@@ -1,0 +1,37 @@
+{% extends "ocp/base/layout.html" %}
+
+{% load static %}
+
+
+{% block body %}
+    <div class="header-about">
+        <h1>OFFICE OF THE CHAIRMAN</h1>
+    </div>
+
+    <div class="mission-wrapper">
+        <div class="image-holder">
+            <img src="{% static 'ocp/images/oldman1.png' %}" alt="Chairman of the Board" class="image-holder-image">
+            <div class="image-caption">CHAIRMAN OF THE BOARD</div>
+        </div>
+
+        <div class="mission-content">
+            <p class="mission-quote">"The future is a privilege, not a right."</p>
+            <h2 class="mission-title">CORPORATE MISSION STATEMENT</h2>
+            
+            
+            
+            <div class="mission-body">
+                <p>Omni Consumer Products (OCP) is dedicated to the total transformation of the modern urban landscape. Our mission is to provide a seamless transition from traditional infrastructure to the era of <strong>Delta City</strong>.</p>
+
+                <div class="directives-label">PRIMARY OBJECTIVES:</div>
+                <ul class="mission-list">
+                    <li><strong>Modernize Urban Living:</strong> Replacing decaying structures with sustainable environments.</li>
+                    <li><strong>Innovate Security:</strong> Deploying advanced pacification technology.</li>
+                    <li><strong>Maximize Value:</strong> Running a city with the efficiency of a world-class corporation.</li>
+                </ul>
+
+                <p class="mission-footer">Efficient management is the roadmap to a safer society. OCP is that map.</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

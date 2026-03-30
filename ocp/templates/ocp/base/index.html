@@ -1,0 +1,63 @@
+{% extends "ocp/base/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <div class="banner-wrapper">
+        <img src="{% static 'ocp/images/ocp-banner1.png' %}" alt="OCP Banner" class="nav-banner">
+    </div>
+
+    <div class="index-wrapper">
+        <div class="index-hero">
+            <p class="tagline">"Building the World of Tomorrow."</p>
+        </div>
+
+        <div class="city-wrapper">
+            <img src="{% static 'ocp/images/background3.png' %}" alt="city1" class="nav-banner">
+        </div>
+
+        <div class="index-content">
+            <section class="about-section">
+                <h2>GLOBAL INFRASTRUCTURE & SECURITY</h2>
+                <p>
+                    Omni Consumer Products (OCP) is the world leader in urban management, 
+                    advanced robotics, and civil engineering. For over half a century, we 
+                    have been the silent partner in human progress, providing the 
+                    infrastructure that powers the modern world.
+                </p>
+            </section>
+
+            <section class="operations-section">
+                <h2>OUR OPERATIONS</h2>
+                <div class="ops-grid">
+                    <div class="ops-item">
+                        <h3>DELTA CITY</h3>
+                        <p>The total transformation of Old Detroit into a safe, efficient, corporate-managed metropolis.</p>
+                    </div>
+                    <div class="ops-item">
+                        <h3>SECURITY CONCEPTS</h3>
+                        <p>Revolutionizing law enforcement through automated pacification and tactical innovation.</p>
+                    </div>
+                    <div class="ops-item">
+                        <h3>CONSUMER GOODS</h3>
+                        <p>From healthcare to household technology, OCP touches every aspect of the modern lifestyle.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <footer class="legal-banner">
+            <div class="legal-content">
+                <p><strong>OFFICIAL CORPORATE COMMUNICATION</strong></p>
+                <p>
+                    © 2026 OMNI CONSUMER PRODUCTS. ALL RIGHTS RESERVED. OCP IS A PUBLICLY TRADED ENTITY. 
+                    UNAUTHORIZED ACCESS TO THIS TERMINAL IS A VIOLATION OF THE PUBLIC TRUST ACT. 
+                    MANAGEMENT RESERVES THE RIGHT TO MONITOR ALL NETWORK TRAFFIC.
+                </p>
+                <p class="fine-print">Delta City is a trademark of OCP. Security provided by OCP Security Concepts Division.</p>
+            </div>
+        </footer>
+    </div>
+{% endblock %}
+
+{% block script %}
+{% endblock %}

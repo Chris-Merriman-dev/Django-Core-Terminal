@@ -1,0 +1,115 @@
+/* --- Standard Page Layout --- */
+.page-wrapper {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* --- Standard Image Holder (Tight Border) --- */
+.standard-banner {
+    width: 100%; 
+    margin-bottom: 40px;
+}
+
+.standard-image {
+    display: block;
+    width: 100%; /* Adjustable per page if needed via inline or specific class */
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+    border: 2px solid #00a2ff;
+    padding: 10px;
+    background-color: #000000;
+    box-shadow: 0 0 20px rgba(0, 162, 255, 0.1);
+    filter: contrast(1.1);
+}
+
+.image-caption {
+    color: #00a2ff;
+    font-size: 16px;
+    text-align: center;
+    margin-top: 15px;
+    letter-spacing: 3px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* --- Standard Content Body --- */
+.page-content {
+    width: 100%;
+    max-width: 900px;
+    color: #ffffff;
+}
+
+.page-title {
+    color: #00a2ff;
+    font-size: 40px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-align: center;
+    border-bottom: 2px solid #00a2ff;
+    margin-bottom: 30px;
+    padding-bottom: 10px;
+}
+
+.page-lead {
+    font-size: 24px;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    text-align: left;
+}
+
+/* --- Standard Lists & Sections --- */
+.section-label {
+    color: #00a2ff;
+    font-weight: bold;
+    font-size: 26px;
+    margin-top: 40px;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.standard-list {
+    list-style: square;
+    padding-left: 30px;
+    font-size: 20px;
+    line-height: 1.8;
+}
+
+.standard-list li strong {
+    color: #00a2ff;
+}
+
+/* --- Standard Quote Box --- */
+.standard-quote-box {
+    margin-top: 50px;
+    padding: 25px;
+    border-left: 4px solid #00a2ff;
+    background: rgba(0, 162, 255, 0.05);
+    font-style: italic;
+    font-size: 24px;
+}
+
+.quote-source {
+    display: block;
+    font-size: 14px;
+    color: #00a2ff;
+    margin-top: 10px;
+    font-style: normal;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+/* --- Standard Footer --- */
+.standard-footer {
+    margin-top: 40px;
+    font-size: 18px;
+    border-top: 1px solid #444;
+    padding-top: 25px;
+    color: #888;
+    text-align: left;
+    font-style: italic;
+}

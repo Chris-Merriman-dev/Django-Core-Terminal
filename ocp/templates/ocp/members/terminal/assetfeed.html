@@ -1,0 +1,113 @@
+{% extends "ocp/base/layout.html" %}
+
+{% load static %}
+{% load tz %}
+
+
+{% block body %}
+    <div class="page-wrapper"></div>
+        <div class="page-content"></div>
+            <h1 class="page-title">OCP ASSET FEED</h1>
+
+            <div class="assetfeed-page-title">
+                
+            </div>
+
+            <div class="mission-wrapper">
+                
+                {% for asset in assets %}
+                    {% if asset.is_public %}
+                        <div id="asset-{{ asset.id }}" class="asset-display">
+                            <div class="asset-frame" onclick="openModal('{{ asset.image.url }}')">
+                                <img src="{{ asset.image.url }}" alt="OCP Tactical Vision" class="zoomable-img">
+                                <div class="asset-overlay-id">FILE_ID: {{ asset.seed|slice:":8" }}</div>
+                                <div class="zoom-hint">ENLARGE</div>
+                            </div>
+
+                            <div class="asset-metadata">
+                                <div class="meta-row">
+                                    <span class="label">USER:</span>
+                                    <span class="value"><a href="{% url 'user_profile' asset.creator.id %}">{{ asset.creator.username|upper }}</a></span>
+                                </div>
+                                
+                                <div class="meta-row">
+                                    <span class="label">CREATED ON:</span>
+                                    {% timezone "US/Eastern" %}
+                                        <span class="value">{{ asset.timestamp|date:"m.d.Y | H:i" }}</span>
+                                    {% endtimezone %}
+                                </div>
+
+                                <div class="meta-footer">
+                                    <span class="approval-count">
+                                        APPROVALS: {{ asset.approvals.count }}
+                                    </span>
+                                    <a href="{{ asset.image.url }}" download="OCP_Asset_{{ asset.id }}.png" class="download-btn">
+                                        DOWNLOAD_FILE
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <button class="assetfeed-comment-toggle" onclick="toggleComments('{{ asset.id }}')">
+                            DIRECTIVES (<span id="count-{{ asset.id }}">{{ asset.comments.count }}</span>)
+                        </button>
+
+                        <div id="comment-section-{{ asset.id }}" class="assetfeed-comment-drawer">
+                            
+                            <form id="comment-form-{{ asset.id }}" class="assetfeed-comment-form" onsubmit="submitComment(event, '{{ asset.id }}')">
+                                {% csrf_token %}
+                                <input type="text" id="input-{{ asset.id }}" name="content" placeholder="ENTER DIRECTIVE..." required>
+                                <button type="submit">SEND</button>
+                            </form>
+
+                            <div class="assetfeed-comment-list">
+                                {% for comment in asset.comments.all|dictsort:"timestamp" %}
+                                    <div class="assetfeed-comment-item">
+                                        <span class="value">[{{ comment.author.username|upper }}]:</span>
+                                        <span class="content">{{ comment.content }}</span>
+                                        <br>
+                                        <small class="label">{{ comment.timestamp|date:"m.d.Y | H:i" }}</small>
+                                    </div>
+                                {% empty %}
+                                    <p class="assetfeed-comment-empty">NO DIRECTIVES ON FILE.</p>
+                                {% endfor %}
+                            </div>
+                        </div>
+
+                    {% endif %}
+                    {% empty %}
+                        <p class="empty-state">NO ASSETS CLEARED FOR PUBLIC VIEWING.</p>
+                {% endfor %}
+
+                <div id="imageModal" class="modal" onclick="closeModal()">
+                    <span class="close">&times;</span>
+                    <img class="modal-content" id="img01">
+                    <div id="caption">TACTICAL_VIEW_ENHANCED</div>
+                </div>
+
+            </div>
+
+            <span class="alignleft_previous_next">
+
+                {% if assets.has_previous %}
+                    <a href="?page=1">&laquo; first</a>
+                    <a href="?page={{ assets.previous_page_number }}">previous</a>
+                {% endif %}
+
+                <span class="current">
+                    Page {{ assets.number }} of {{ assets.paginator.num_pages }}.
+                </span>
+
+                {% if assets.has_next %}
+                    <a href="?page={{ assets.next_page_number }}">next</a>
+                    <a href="?page={{ assets.paginator.num_pages }}">last &raquo;</a>
+                {% endif %}
+                
+            </span>
+
+        </div>
+
+    </div>
+
+    <script src="{% static 'ocp/js/assetfeed.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,357 @@
+/* OCP IMAGE CREATION TERMINAL. COLOR MATCHED TO CHAT.CSS */
+
+.image-creation-container { 
+    background: #1a1a1a; /* Matches .ed-chat-container */
+    padding: 30px; 
+    border-radius: 8px; 
+    border: 1px solid #333; /* Matches .ed-chat-container */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+    width: 95%;
+    max-width: 900px;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    text-align: center; 
+    margin: 20px auto;
+    overflow: hidden; /* Matches .ed-chat-container */
+}
+
+/* TITLE HEADER SECTION  */
+
+.image-creation-page-title {
+    /* Pulls to the top and side edges of the container */
+    margin: -30px -30px 0 -30px; 
+    padding: 15px;
+    background: #1a1a1a; 
+    border-bottom: 1px solid #333;
+    text-align: center;
+}
+
+.image-creation-page-title h2 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: #00a2ff;
+}
+
+/* INPUT SECTION */
+
+.image-creation-textarea { 
+    width: 100%; 
+    height: 30vh;          
+    min-height: 150px;     
+    padding: 15px; 
+    background: #0f0f0f; /* Matched to input#ed-chat-user-input */
+    border: 1px solid #444; /* Matched to input#ed-chat-user-input */
+    color: white;
+    border-radius: 4px; 
+    resize: vertical;      
+    box-sizing: border-box; 
+    margin-bottom: 20px; 
+    outline: none;
+    font-family: inherit;
+    font-size: 1.1rem;
+}
+
+.image-creation-textarea:focus {
+    border-color: #00a2ff; /* Standardized to OCP Blue instead of generic #007bff */
+}
+
+/*  BUTTONS SETUP*/
+
+.image-creation-btn { 
+    /* Default Disabled State */
+    background-color: #333; 
+    color: #666;
+    cursor: not-allowed; 
+    pointer-events: none; /* Prevents hover effects while disabled */
+
+    border: none; 
+    padding: 12px 25px; 
+    border-radius: 4px; 
+    font-weight: bold; 
+    width: 100%; 
+    transition: all 0.2s;
+    font-family: monospace;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* Enabled State (Triggered when JS removes the 'disabled' attribute) */
+.image-creation-btn:not(:disabled) {
+    background-color: #007bff; /* Matched to button#ed-chat-send-btn */
+    color: white;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.image-creation-btn:not(:disabled):hover {
+    background-color: #0056b3; /* Matched to button#ed-chat-send-btn:hover */
+    box-shadow: 0 0 10px rgba(0, 123, 255, 0.3);
+}
+
+/* Specific styling for the disabled attribute itself as a fallback */
+.image-creation-btn:disabled { 
+    background-color: #333; 
+    color: #666;
+    cursor: not-allowed; 
+}
+
+/* --- SERVER STATUS BAR (Aligned to Chat Logic) --- */
+
+#image-creation-server-status-bar {
+    margin: 0 -30px 25px -30px; 
+    padding: 8px 15px;
+    background: #111;
+    border-bottom: 1px solid #333;
+    font-family: monospace;
+    font-size: 0.75rem; 
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    text-transform: uppercase;
+    /* This makes the "Server Status:" label blue, matching .ed-chat-status-label */
+    color: #00a2ff; 
+}
+
+/* Corrected: Targeted only the span for status colors/glows */
+#image-creation-status-text {
+    font-weight: bold;
+    margin-left: 8px;
+    transition: all 0.3s ease;
+}
+
+/* Status state logic  only affects the dynamic text */
+.image-creation-status-online #image-creation-status-text { 
+    color: #00ff00; 
+    text-shadow: 0 0 8px rgba(0, 255, 0, 0.6); 
+}
+
+.image-creation-status-offline #image-creation-status-text { 
+    color: #ff0000; 
+    text-shadow: 0 0 8px rgba(255, 0, 0, 0.6); 
+}
+
+.image-creation-status-busy #image-creation-status-text { 
+    color: #f39c12; /* Caution Yellow for processing */
+    text-shadow: 0 0 8px rgba(243, 156, 18, 0.4);
+}
+
+/*  RESULT AREA & SCROLLBARS  */
+
+#image-creation-display { 
+    width: 100%; 
+    border-radius: 4px; 
+    display: none; 
+    cursor: zoom-in;
+    transition: 0.3s;
+    border: 1px solid #333;
+}
+
+#image-creation-history-scrollbox::-webkit-scrollbar {
+    height: 6px; /* Matched width logic from .chat-display */
+}
+
+#image-creation-history-scrollbox::-webkit-scrollbar-thumb {
+    background: #333; /* Matched to .chat-display scrollbar */
+    border-radius: 10px;
+}
+
+#image-creation-history-container {
+    margin-top: 20px;
+    padding: 15px;
+    background: #111; /* Matched to chat headers/footers */
+    border-radius: 4px;
+    border: 1px solid #333;
+    color: #eeeeee;
+}
+
+/*  MODAL (Strictly Zoom/Pan) */
+
+#image-creation-modal {
+    overflow: hidden; 
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0; top: 0;
+    width: 100%; height: 100%;
+    background-color: rgba(0,0,0,0.95); /* Deep OCP black-out */
+}
+
+/* Updated to match ID: #image-creation-img-full */
+.image-creation-modal-content {
+    margin: auto;
+    display: block;
+    max-width: 90%;
+    max-height: 85vh;
+    border: 1px solid #333; /* Matches container borders */
+    border-radius: 4px;
+    cursor: grab;
+    transition: transform 0.1s ease-out;
+    transform-origin: center;
+    user-select: none;
+    box-shadow: 0 0 30px rgba(0,0,0,0.8);
+}
+
+.image-creation-modal-content:active {
+    cursor: grabbing;
+    border-color: #00a2ff; /* Highlights OCP Blue when interacting */
+}
+
+.modal-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+}
+
+/* Updated to match Class: .image-creation-modal-close */
+.image-creation-modal-close {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: #f1f1f1;
+    font-size: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 1100;
+    line-height: 1;
+    transition: color 0.2s;
+}
+
+.image-creation-modal-close:hover {
+    color: #ff0000; /* Red alert hover state */
+}
+
+#caption {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+    color: #00a2ff; /* OCP Blue text */
+    font-family: monospace; /* Terminal font */
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    pointer-events: none;
+    z-index: 1020;
+    opacity: 0.7;
+}
+
+/* HISTORY GALLERY (Synced Names)  */
+
+#image-creation-history-container {
+    margin-top: 20px;
+    padding: 15px;
+    background: #111; /* Matched to status bar/header background */
+    border-radius: 4px;
+    border: 1px solid #333;
+    color: #eeeeee;
+}
+
+#image-creation-history-container h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+    font-family: monospace;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #00a2ff; /* Standardized OCP Blue */
+}
+
+#image-creation-history-scrollbox {
+    display: flex;
+    gap: 12px;
+    overflow-x: auto;
+    padding: 10px 5px;
+    scrollbar-width: thin;
+    scrollbar-color: #333 #111;
+}
+
+/* Webkit Scrollbar Sync */
+#image-creation-history-scrollbox::-webkit-scrollbar {
+    height: 6px;
+}
+#image-creation-history-scrollbox::-webkit-scrollbar-track {
+    background: #0f0f0f;
+}
+#image-creation-history-scrollbox::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 10px;
+}
+#image-creation-history-scrollbox::-webkit-scrollbar-thumb:hover {
+    background: #444;
+}
+
+.image-creation-history-thumb {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 4px;
+    cursor: pointer;
+    border: 1px solid #333;
+    transition: all 0.2s ease-in-out;
+    flex-shrink: 0;
+    filter: grayscale(40%); /* Subtle industrial look */
+}
+
+.image-creation-history-thumb:hover {
+    filter: grayscale(0%);
+    border-color: #00a2ff;
+    transform: translateY(-2px);
+}
+
+.image-creation-history-thumb.active {
+    border-color: #00ff00; /* Green glow for active selection */
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.3);
+    filter: grayscale(0%);
+}
+
+/* --- OCP STATUS AREA STYLING --- */
+
+#image-creation-status-area {
+    margin-top: 15px;
+    padding: 10px;
+    background: #0a0a0a; /* Deep contrast for status */
+    border: 1px solid #222;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #888; /* Default idle color */
+    transition: all 0.3s ease;
+    min-height: 1.2rem;
+}
+
+/* Status: UP-LINKING / PROCESSING (Amber/Yellow Caution) */
+.image-creation-status-busy #image-creation-status-area {
+    color: #f39c12; 
+    border-color: #f39c12;
+    text-shadow: 0 0 10px rgba(243, 156, 18, 0.5);
+    background: rgba(243, 156, 18, 0.05);
+    animation: ocp-blink 1.5s infinite;
+}
+
+/* Status: SUCCESS (Green) */
+.image-creation-status-online #image-creation-status-area {
+    color: #00ff00;
+    border-color: #00ff00;
+    text-shadow: 0 0 10px rgba(0, 255, 0, 0.4);
+}
+
+/* Status: ERROR (Red) */
+.image-creation-status-offline #image-creation-status-area {
+    color: #ff0000;
+    border-color: #ff0000;
+    text-shadow: 0 0 10px rgba(255, 0, 0, 0.4);
+}
+
+/* Tactical Blink Animation */
+@keyframes ocp-blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.6; }
+    100% { opacity: 1; }
+}

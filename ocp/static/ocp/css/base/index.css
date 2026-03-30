@@ -1,0 +1,123 @@
+/* --- Index Layout --- */
+.index-wrapper {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    color: #ffffff;
+}
+
+/* --- Hero Section --- */
+.index-hero {
+    text-align: center;
+    border-top: 2px solid #00a2ff;
+    border-bottom: 2px solid #00a2ff;
+    padding-top: 40px;
+    padding-bottom: 40px;
+    margin-bottom: 50px;
+}
+
+.city-wrapper {
+    display: flex;
+    justify-content: center; 
+    align-items: center;     
+    width: 100%;
+    margin-bottom: 40px; 
+    /* Add this to prevent flexbox from squeezing the item */
+    overflow: hidden; 
+}
+
+/* Target the image specifically */
+.city-wrapper img {
+    width: 80%;   /* Forces the image to span the full width of the wrapper */
+    height: auto;  /* Maintains the aspect ratio so it doesn't look stretched */
+    display: block;
+}
+
+.ocp-logo-text {
+    font-size: 64px;
+    font-weight: 900;
+    letter-spacing: 10px;
+    margin: 0;
+    -webkit-text-stroke: 1px #00a2ff;
+}
+
+.tagline {
+    font-size: 35px;
+    color: #00a2ff;
+    font-style: italic;
+    margin-top: 10px;
+}
+
+/* --- Content Sections --- */
+.index-content h2 {
+    color: #00a2ff;
+    font-size: 28px;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+    border-left: 5px solid #00a2ff;
+    padding-left: 15px;
+}
+
+.about-section p {
+    font-size: 22px;
+    line-height: 1.6;
+    margin-bottom: 50px;
+}
+
+/* --- Operations Grid --- */
+.ops-grid {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 80px;
+}
+
+.ops-item {
+    flex: 1;
+    background: rgba(0, 162, 255, 0.05);
+    border: 1px solid #333;
+    padding: 20px;
+    transition: border 0.3s ease;
+}
+
+.ops-item:hover {
+    border: 1px solid #00a2ff;
+}
+
+.ops-item h3 {
+    color: #ffffff;
+    font-size: 20px;
+    margin-top: 0;
+}
+
+.ops-item p {
+    font-size: 16px;
+    color: #cccccc;
+    line-height: 1.4;
+}
+
+/* --- Legal Banner --- */
+.legal-banner {
+    margin-top: 100px;
+    background: #000;
+    border-top: 3px solid #00a2ff;
+    padding: 30px;
+    text-align: center;
+}
+
+.legal-content {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 14px;
+    color: #666; /* Dimmed text for legal feel */
+    line-height: 1.5;
+}
+
+.legal-content strong {
+    color: #888;
+    letter-spacing: 2px;
+}
+
+.fine-print {
+    margin-top: 15px;
+    font-size: 11px;
+    text-transform: uppercase;
+}

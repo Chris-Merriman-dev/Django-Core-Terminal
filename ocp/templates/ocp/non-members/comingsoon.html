@@ -1,0 +1,42 @@
+{% extends "ocp/base/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <div class="header-about">
+        <h1>FUTURE INITIATIVES</h1>
+    </div>
+
+    <div class="page-wrapper">
+        <div class="standard-banner">
+            <img src="{% static 'ocp/images/dickjones-1.png' %}" alt="Senior President Dick Jones" class="standard-image">
+            <div class="image-caption">RICHARD "DICK" JONES - SENIOR PRESIDENT</div>
+        </div>
+
+        <div class="page-content">
+            <h2 class="page-title">A VISION FOR THE NEW CENTURY</h2>
+            
+            <p class="page-lead">
+                "We are at the threshold of a new age. OCP is not just dreaming of the future; we are manufacturing it. 
+                Our upcoming product cycle will redefine the concept of civic stability."
+            </p>
+
+            <div class="section-label">PROJECT PIPELINE [Q3-Q4 2026]:</div>
+            <ul class="standard-list">
+                <li><strong>Delta City Phase Two:</strong> Groundbreaking on the automated transit network.</li>
+                <li><strong>Advanced Robotics:</strong> Refinement of the Series 209 logic systems for household integration.</li>
+                <li><strong>Private Security Networks:</strong> A subscription-based protection model for elite neighborhoods.</li>
+                <li><strong>Metropolitan Renewal:</strong> Expanding our infrastructure footprint into the outer sectors.</li>
+            </ul>
+
+            <div class="standard-quote-box">
+                <p>"Our success in the defense sector with the ED-209 was only the beginning. OCP is now moving into its most ambitious phase yet, bringing absolute security to the streets of Delta City. After all... I say good business is where you find it."</p>
+                <span class="quote-source">- FROM THE DESK OF RICHARD JONES, SENIOR PRESIDENT</span>
+            </div>
+
+            <footer class="standard-footer">
+                <p>© 2026 OMNI CONSUMER PRODUCTS. FOR SHAREHOLDER INFORMATION, CONTACT OCP INVESTOR RELATIONS.</p>
+                <p>"The Future is a Privilege, Not a Right."</p>
+            </footer>
+        </div>
+    </div>
+{% endblock %}

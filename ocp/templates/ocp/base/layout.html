@@ -1,0 +1,117 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{% block title %}(OCP) Omni Consumer Products{% endblock %}</title>
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link href="{% static 'ocp/css/baseline.css' %}" rel="stylesheet">
+
+        
+    </head>
+    <body>
+
+        <nav class="navbar navbar-expand ocp-navbar">
+
+            <a class="navbar-brand" href="{% url 'index' %}">
+                <img src="{% static 'ocp/images/OCP-Logo-Nav1.webp' %}" alt="OCP Logo" class="nav-logo">
+            </a>
+  
+            <a class="nav-link" id="ocp-text-id" href="{% url 'index' %}">Omni Consumer Products</a>
+
+            
+            <ul class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="terminalDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Terminal
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right ocp-dropdown" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{% url 'dashboard' %}">Dashboard</a>
+                            <a class="dropdown-item" href="{% url 'assetfeed' %}">Public Asset Feed</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="directivesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Directives
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right ocp-dropdown" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{% url 'chat' %}">ED-209 Chat Interface</a>
+                            <a class="dropdown-item" href="{% url 'image_creation' %}">ED-209 Vision Generator</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="settingsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            User Settings
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right ocp-dropdown" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{% url 'user_profile' user.id %}">Profile</a>
+                            {% if user.access_level >= 4 %}
+                                <a class="dropdown-item" href="{% url 'security_settings' %}">Security Settings</a>
+                            {% endif %}
+                            <div class="dropdown-divider"></div>
+                            <a class="dropdown-item" href="{% url 'logout' %}">Log Out</a>
+                        </div>
+                    </li>
+                    <li class="nav-item navbar-text ml-3">
+                        Logged in as: <a href="{% url 'user_profile' user.id %}"><strong>{{ user.username }}</strong></a>
+                    </li>
+                {% else %}
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="servicesDropDown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Services
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right ocp-dropdown" aria-labelledby="guestDropdown">
+                            <a class="dropdown-item" href="{% url 'currentproducts' %}">Current Products</a>
+                            <a class="dropdown-item" href="{% url 'comingsoon' %}">More Coming Soon!</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="employmentDropDown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Employment
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right ocp-dropdown" aria-labelledby="guestDropdown">
+                            <a class="dropdown-item" href="{% url 'employment' %}">Join Us Today!</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="aboutDropDown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            About
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right ocp-dropdown" aria-labelledby="guestDropdown">
+                            <a class="dropdown-item" href="{% url 'about' %}">About OCP</a>
+                            <a class="dropdown-item" href="{% url 'mission' %}">Mission Statement</a>
+                        </div>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="signInDropDown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Sign In
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right ocp-dropdown" aria-labelledby="guestDropdown">
+                            <a class="dropdown-item" href="{% url 'login' %}">Sign In</a>
+                            <a class="dropdown-item" href="{% url 'register' %}">Register</a>
+                        </div>
+                    </li>
+
+
+                {% endif %}
+            </ul>
+        </nav>
+        
+        <div class="body">
+            {% block body %}
+            {% endblock %}
+        </div>
+        
+        <script src="{% static 'ocp/js/script.js' %}"></script>
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
+    </body>
+</html>

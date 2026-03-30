@@ -1,0 +1,24 @@
+/* --- Header Styles (Shared across sub-pages) --- */
+.header-about {
+    background-color: #000000;
+    border-bottom: 2px solid #00a2ff;
+    padding: 30px 0;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.header-about h1 {
+    color: #ffffff;
+    font-size: 48px;
+    font-weight: 800;
+    margin: 0;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    -webkit-text-stroke: 1px #00a2ff;
+    font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+/* --- Page Specific Adjustments --- */
+.standard-image {
+    width: 60%; /* ED-209 requires a larger presence than the default 40% */
+}

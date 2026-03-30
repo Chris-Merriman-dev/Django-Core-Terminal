@@ -1,0 +1,103 @@
+/* --- Mission Page Layout --- */
+.mission-wrapper {
+    max-width: 1000px; /* Limits width for readability */
+    margin: 0 auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+}
+
+/* --- Chairman Hero Image Section --- */
+.chairman-hero {
+    width: 100%; 
+    margin-bottom: 20px;
+    border: 2px solid #00a2ff; /* Signature OCP Blue Border */
+    padding: 10px;
+    background-color: #000000;
+    box-shadow: 0 0 20px rgba(0, 162, 255, 0.1);
+}
+
+.old-man-1 {
+    width: 100%; 
+    height: auto;
+    display: block;
+    filter: contrast(1.1); /* Sharpens the image for a CRT look */
+}
+
+.image-caption {
+    color: #00a2ff;
+    font-size: 20px;
+    text-align: center;
+    margin-top: 15px;
+    letter-spacing: 6px;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* --- Mission Statement Text Section --- */
+.mission-content {
+    width: 100%;
+    color: #ffffff;
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+}
+
+.mission-title {
+    color: #00a2ff;
+    font-size: 42px;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-align: center;
+}
+
+.mission-quote {
+    font-size: 32px;
+    font-style: italic;
+    color: #ffffff;
+    margin-bottom: 20px;
+    text-align: center;
+    border-top: 1px solid #333;
+    border-bottom: 1px solid #333;
+    padding: 25px 0;
+    line-height: 1.2;
+}
+
+.mission-body {
+    font-size: 22px;
+    line-height: 1.6;
+}
+
+.directives-label {
+    color: #00a2ff;
+    font-weight: bold;
+    font-size: 26px;
+    margin-top: 40px;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.mission-list {
+    list-style: square;
+    padding-left: 30px;
+    margin-bottom: 50px;
+}
+
+.mission-list li {
+    margin-bottom: 15px;
+    color: #e0e0e0;
+}
+
+.mission-list strong {
+    color: #00a2ff; /* Highlights the key directive titles */
+}
+
+.mission-footer {
+    margin-top: 40px;
+    font-size: 18px;
+    border-top: 1px solid #444;
+    padding-top: 25px;
+    color: #888;
+    font-style: italic;
+    text-align: left;
+}

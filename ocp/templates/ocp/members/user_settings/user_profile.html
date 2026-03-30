@@ -1,0 +1,62 @@
+{% extends "ocp/base/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <div class="header-about">
+        <h1>SECURED PERSONNEL DOSSIER</h1>
+    </div>
+
+    <div class="page-wrapper">
+        <div class="page-content personnel-container">
+            {% if user %}
+                <div class="profile-card">
+                    <div class="profile-data">
+                        <div class="data-header">
+                            <div class="header-main">
+                                <span class="label">SUBJECT NAME:</span>
+                                <h2 class="value">{{ user.username|upper }}</h2>
+                            </div>
+                            <div class="status-indicator">
+                                <span class="pulse"></span> ACCOUNT ACTIVE
+                            </div>
+                        </div>
+
+                        <div class="data-grid">
+                            <div class="data-item">
+                                <span class="label">EMPLOYEE ID:</span>
+                                <span class="value">#{{ user.employee_id|default:"000000" }}</span>
+                            </div>
+                            
+                            <div class="data-item">
+                                <span class="label">CLEARANCE STATUS:</span>
+                                <span class="value">
+                                    {% if user.access_level > 1 %}
+                                        <span class="status-verified">VERIFIED</span>
+                                    {% else %}
+                                        <span class="status-pending">PENDING/GUEST</span>
+                                    {% endif %}
+                                </span>
+                            </div>
+
+                            <div class="data-item wide">
+                                <span class="label">ACCESS LEVEL:</span>
+                                <span class="value level-{{ user.access_level|default:'1' }}">
+                                    {{ user.get_access_level_display|upper }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="security-notice">
+                            <p>WARNING: ALL ACTIONS PERFORMED UNDER THIS IDENTITY ARE LOGGED BY OCP CENTRAL COMMAND. DO NOT DISCLOSE ACCESS CODES. DIRECTIVE 4 IS IN EFFECT.</p>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="security-error">
+                    <h2>UNAUTHORIZED ACCESS</h2>
+                    <p>IDENTITY NOT RECOGNIZED. PLEASE RE-AUTHENTICATE.</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

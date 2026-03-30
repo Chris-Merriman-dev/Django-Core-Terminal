@@ -1,0 +1,141 @@
+
+/* used for chats status bar if ed chats online or offline*/
+.ed-chat-status-bar{
+    padding: 8px 15px;
+    background: #111;
+    border-bottom: 1px solid #333;
+    font-family: monospace;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+}
+
+.ed-chat-status-label{
+    color: #00a2ff;
+    margin-right: 8px;
+}
+
+.ed-chat-status-indicator{
+    font-weight: bold;
+}
+
+.online {
+    color: #00ff00;
+    text-shadow: 0 0 8px rgba(0, 255, 0, 0.6);
+}
+
+.offline {
+    color: #ff0000;
+    text-shadow: 0 0 8px rgba(255, 0, 0, 0.6);
+}
+
+.ed-chat-page-title{
+    padding: 15px;
+    border-bottom: 1px solid #333;
+    text-align: center;
+}
+
+.ed-chat-page-title h1{
+    margin: 0;
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    color: #00a2ff;
+}
+
+.ed-chat-container{
+    width: 90vw;
+    max-width: 900px;
+    height: 85vh;
+    display: flex;
+    flex-direction: column;
+    background: #1a1a1a;
+    border: 1px solid #333;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    margin: 20px auto;
+    overflow: hidden;
+}
+
+/* our chat display for ed209 */
+
+.ed-chat-display{
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.chat-display::-webkit-scrollbar {
+    width: 6px;
+}
+.chat-display::-webkit-scrollbar-thumb {
+    background: #333;
+    border-radius: 10px;
+}
+
+.ed-chat-input-area{
+    padding: 20px;
+    border-top: 1px solid #333;
+    display: flex;
+    gap: 10px; 
+}
+
+/* define our input for ed chat*/
+
+input#ed-chat-user-input {
+    flex-grow: 1;
+    background: #0f0f0f;
+    border: 1px solid #444;
+    padding: 12px;
+    color: white;
+    border-radius: 4px;
+    outline: none;
+}
+
+input#ed-chat-user-input:focus {
+    border-color: #007bff;
+}
+
+button#ed-chat-send-btn {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 0 25px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.2s;
+}
+
+button#ed-chat-send-btn:hover {
+    background: #0056b3;
+}
+
+/* Message Bubbles */
+.message {
+    max-width: 80%;
+    padding: 12px 16px;
+    border-radius: 6px;
+    line-height: 1.5;
+}
+
+.user-message {
+    align-self: flex-end;
+    background-color: #0056b3;
+    color: white;
+}
+
+.ai-message {
+    align-self: flex-start;
+    background-color: #2d2d2d;
+    border: 1px solid #444;
+}
+
+.date-message {
+    align-self: flex-start;
+    background-color: #2d2d2d;
+    border: 1px solid #444;
+}

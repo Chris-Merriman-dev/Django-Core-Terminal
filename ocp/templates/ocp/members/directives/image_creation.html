@@ -1,0 +1,47 @@
+{% extends "ocp/base/layout.html" %}
+{% load static %}
+
+{% block body %}
+    <div class="page-wrapper">
+        <div class="image-creation-container">
+
+            <div class="image-creation-page-title">
+                <h2>ED-209 Vision Generator. Clearance {{user.get_access_level_display}}</h2>
+            </div>
+
+            <div id="image-creation-server-status-bar" class="image-creation-status-offline">
+                Server Status: <span id="image-creation-status-text">Checking...</span>
+            </div>
+            
+            <textarea id="image-creation-prompt-input" class="image-creation-textarea" placeholder="Enter your detailed prompt here..."></textarea>
+            <button id="image-creation-generate-btn" class="image-creation-btn" disabled>Generate Image</button>
+
+            <div id="image-creation-status-area"></div>
+
+            <div id="image-creation-history-container">
+                <h3>Generated History</h3>
+                <div id="image-creation-history-scrollbox">
+                    </div>
+            </div>
+
+            <div id="image-creation-main-result-area">
+                <img id="image-creation-display" src="" alt="Generated Result">
+                <button id="image-creation-main-download-btn" class="image-creation-download-btn-main" style="display: none;">💾 Download High-Res</button>
+            </div>
+
+        </div>
+
+        <div id="image-creation-modal">
+            <span class="image-creation-modal-close">&times;</span>
+            <div class="modal-wrapper">
+                <img class="image-creation-modal-content" id="image-creation-img-full">
+            </div>
+            <div id="caption">Scroll to Zoom • Drag to Pan</div>
+        </div>
+
+    </div>
+
+    </div> 
+    <script src="{% static 'ocp/js/image_creation.js' %}"></script>
+
+{% endblock %}
