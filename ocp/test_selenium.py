@@ -48,24 +48,25 @@ class NonMemberUITests(StaticLiveServerTestCase):
         super().setUpClass()
         options = Options()
 
-        #if we want headless, set it
-        if HEADLESS:
-            options.add_argument("--headless")
-            options.add_argument("--width=1920")
-            options.add_argument("--height=1080")
         #if not headless and we are on GitHub Actions, it sets 'GITHUB_ACTIONS' to true automatically
-        elif os.environ.get('GITHUB_ACTIONS') == 'true':
+        if os.environ.get('GITHUB_ACTIONS') or HEADLESS:
             options.add_argument("--headless")
             options.add_argument("--width=1920")
             options.add_argument("--height=1080")
-        
-        #cls.driver = webdriver.Firefox(options=options)
-        # This line is the magic: it downloads and paths Geckodriver automatically
-        cls.driver = webdriver.Firefox(
-            service=Service(GeckoDriverManager().install()), 
-            options=options
-        )
+
+        if os.environ.get('GITHUB_ACTIONS'):
+            # This line is the magic: it downloads and paths Geckodriver automatically
+            cls.driver = webdriver.Firefox(
+                service=Service("/usr/local/bin/geckodriver"),
+                options=options
+            )
+        #if we want headless, set it
+        else:
+            cls.driver = webdriver.Firefox(options=options)
+
         cls.driver.implicitly_wait(10)
+        
+
 
     @classmethod
     def tearDownClass(cls):
@@ -270,8 +271,8 @@ class NonMemberUITests(StaticLiveServerTestCase):
     #make sure we are on the index page
     @unittest.skipUnless(RUN_SELENIUM_TESTS, "SELENIUM tests are currently disabled")
     def test_guest_indexpage(self):
-        #lets verify we logged out
-        wait = WebDriverWait(self.driver, 10)
+        
+        self.driver.get(self.live_server_url + reverse('index'))
 
         #check to see if we are on index
         expected_url = self.live_server_url + reverse('index')
