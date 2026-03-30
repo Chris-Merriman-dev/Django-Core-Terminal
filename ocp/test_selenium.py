@@ -53,14 +53,14 @@ class NonMemberUITests(StaticLiveServerTestCase):
 
             # Headless mode for CI
             if os.environ.get("GITHUB_ACTIONS") == "true" or HEADLESS:
-                options.add_argument("--headless=new")  # modern headless mode
+                options.add_argument("--headless=new")
                 options.add_argument("--window-size=1920,1080")
 
             # CI stability flags
             options.add_argument("--no-sandbox")
             options.add_argument("--disable-dev-shm-usage")
 
-            # Additional stability flags (IMPORTANT for CI)
+            # Additional stability flags
             options.add_argument("--disable-gpu")
             options.add_argument("--disable-software-rasterizer")
             options.add_argument("--remote-debugging-port=9222")
