@@ -85,6 +85,52 @@ class NonMemberUITests(StaticLiveServerTestCase):
         Helper Functions
     '''
     def login(self, CREATE_USER: bool = True, username: str = "testuser", password: str = "testpassword123", access_level: int = 1) -> Any:
+        # 1. DATABASE WORK FIRST
+        if CREATE_USER:
+            User = get_user_model()
+            new_user, created = User.objects.get_or_create(username=username)
+            new_user.set_password(password)
+            new_user.access_level = access_level
+            new_user.save()
+        else:
+            new_user = None
+
+        # 2. CLEAN SLATE - MUST HAPPEN BEFORE GETTING THE LOGIN PAGE
+        # Navigate to a neutral page to allow cookie deletion
+        self.driver.get(self.live_server_url + "/admin/logout/") 
+        self.driver.delete_all_cookies() 
+        
+        # 3. NOW GET THE LOGIN PAGE (Fresh CSRF token generated here)
+        self.driver.get(self.live_server_url + reverse('login'))
+        
+        wait = WebDriverWait(self.driver, 15)
+        
+        # 4. FORM HANDLING
+        user_field = wait.until(EC.element_to_be_clickable((By.NAME, "username")))
+        user_field.clear()
+        user_field.send_keys(username)
+        
+        pass_field = self.driver.find_element(By.NAME, "password")
+        pass_field.clear()
+        pass_field.send_keys(password)
+        
+        # 5. SUBMIT - Use JavaScript click as a fallback if native click is being flaky in headless
+        login_btn = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[value='Login']")))
+        try:
+            login_btn.click()
+        except:
+            self.driver.execute_script("arguments[0].click();", login_btn)
+        
+        # 6. VERIFICATION
+        try:
+            wait.until(EC.url_contains('/dashboard'))
+        except TimeoutException:
+            actual_url = self.driver.current_url
+            raise TimeoutException(f"Login redirect failed. Ended up at: {actual_url}")
+
+        return new_user
+
+    def login8(self, CREATE_USER: bool = True, username: str = "testuser", password: str = "testpassword123", access_level: int = 1) -> Any:
         if CREATE_USER:
             User = get_user_model()
             # USE get_or_create to prevent IntegrityErrors if a previous test leaked data
