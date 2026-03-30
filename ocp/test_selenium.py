@@ -31,6 +31,7 @@ import time
 import unittest
 import os
 
+
 #used so i do not have to retest ones that work, when adding new tests
 #SET TO
 #  True to run everything 
@@ -48,20 +49,19 @@ class NonMemberUITests(StaticLiveServerTestCase):
         try:
             super().setUpClass()
 
-            from selenium import webdriver
-            from selenium.webdriver.firefox.service import Service
-            from selenium.webdriver.firefox.options import Options
-            import os
+            
 
             options = Options()
 
-            # Always headless in CI or when explicitly requested
             if os.environ.get("GITHUB_ACTIONS") == "true" or HEADLESS:
                 options.add_argument("--headless")
                 options.add_argument("--width=1920")
                 options.add_argument("--height=1080")
 
-            # Explicit geckodriver service path (CI-safe)
+                # CI stability flags
+                options.add_argument("--no-sandbox")
+                options.add_argument("--disable-dev-shm-usage")
+
             service = Service("/usr/local/bin/geckodriver")
 
             cls.driver = webdriver.Firefox(service=service, options=options)
