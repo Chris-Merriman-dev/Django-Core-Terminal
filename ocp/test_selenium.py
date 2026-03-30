@@ -14,6 +14,7 @@ from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from django.urls import reverse
 #from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
+from django.db import connections, transaction
 
 from selenium import webdriver
 #from selenium.webdriver.firefox.options import Options
@@ -24,6 +25,10 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
+
+
+
+
 
 #from selenium.webdriver.firefox.service import Service
 #from webdriver_manager.firefox import GeckoDriverManager
@@ -85,7 +90,96 @@ class NonMemberUITests(StaticLiveServerTestCase):
         Helper Functions
     '''
 
-    def login(self, CREATE_USER: bool = True, username: str = "testuser", password: str = "testpassword123", access_level: int = 1) -> Any:
+    def login(
+        self,
+        CREATE_USER: bool = True,
+        username: str = "testuser",
+        password: str = "testpassword123",
+        access_level: int = 1
+    ) -> Any:
+
+        
+
+
+
+        # -------------------------
+        # 1. Create user (DB-safe)
+        # -------------------------
+        if CREATE_USER:
+            User = get_user_model()
+
+            new_user, _ = User.objects.update_or_create(
+                username=username,
+                defaults={'access_level': access_level}
+            )
+
+            # Ensure password is properly hashed + saved
+            new_user.set_password(password)
+
+            # 🔥 CRITICAL: force commit across threads
+            with transaction.atomic():
+                new_user.save()
+
+            # 🔥 Force DB connection refresh so live server sees it
+            connections['default'].close()
+
+            # Optional micro-delay for CI stability
+            time.sleep(0.2)
+
+        else:
+            new_user = None
+
+        # -------------------------
+        # 2. Clean browser state
+        # -------------------------
+        self.driver.get(self.live_server_url)   # ensure correct domain
+        self.driver.delete_all_cookies()
+
+        # -------------------------
+        # 3. Go to login page
+        # -------------------------
+        self.driver.get(self.live_server_url + reverse('login'))
+        wait = WebDriverWait(self.driver, 15)
+
+        # -------------------------
+        # 4. Fill form (robust)
+        # -------------------------
+        user_field = wait.until(EC.visibility_of_element_located((By.NAME, "username")))
+        user_field.clear()
+        user_field.send_keys(username)
+
+        pass_field = wait.until(EC.visibility_of_element_located((By.NAME, "password")))
+        pass_field.clear()
+        pass_field.send_keys(password)
+
+        # -------------------------
+        # 5. Submit safely
+        # -------------------------
+        login_btn = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[value='Login']")))
+        self.driver.execute_script("arguments[0].scrollIntoView(true);", login_btn)
+
+        time.sleep(0.2)  # small buffer for CI
+        login_btn.click()
+
+        # -------------------------
+        # 6. Verify login
+        # -------------------------
+        try:
+            wait.until(EC.url_contains('/dashboard'))
+        except TimeoutException:
+            actual_url = self.driver.current_url
+
+            try:
+                msg = self.driver.find_element(By.TAG_NAME, "body").text[:200]
+                print(f"[DEBUG] Login Page Text: {msg}")
+            except:
+                pass
+
+            raise TimeoutException(f"Login redirect failed. Ended up at: {actual_url}")
+
+        return new_user
+
+    def login999(self, CREATE_USER: bool = True, username: str = "testuser", password: str = "testpassword123", access_level: int = 1) -> Any:
         if CREATE_USER:
             User = get_user_model()
             # 1. Use update_or_create to ensure the user is FRESH every single time
