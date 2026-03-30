@@ -23,7 +23,7 @@ import shutil
 import httpx
 
 #path used for our html files and etag checks
-html_path = "ocp\\templates\\ocp"
+html_path = os.path.join("ocp", "templates", "ocp")   #"ocp\\templates\\ocp"
 
 #import all of our custom models
 from .models import *
