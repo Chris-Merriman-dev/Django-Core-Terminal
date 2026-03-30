@@ -11,9 +11,12 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    
+    # These force Django to behave in a headless cloud environment
     env:
-      CI: true
-      DJANGO_SECRET_KEY: "temporary-key-for-testing"
+      DJANGO_SECRET_KEY: "ci-test-key-2026"
+      DEBUG: "True"
+      PYTHONPATH: ${{ github.workspace }}
 
     steps:
       - name: Checkout code
@@ -28,12 +31,21 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          # Essential for Selenium 4.x in CI
+          pip install webdriver-manager 
 
-      - name: Setup Chrome for Selenium
+      - name: Setup Chrome
         uses: browser-actions/setup-chrome@latest
         with:
           chrome-version: stable
 
+      - name: Prepare Django Environment
+        run: |
+          python manage.py makemigrations
+          python manage.py migrate
+          python manage.py collectstatic --noinput
+
       - name: Run Django Tests
         run: |
+          # The --noinput ensures it doesn't wait for a prompt that will never come
           python manage.py test --noinput
