@@ -12,6 +12,8 @@ jobs:
       PYTHONPATH: ${{ github.workspace }}
       DJANGO_SETTINGS_MODULE: capstone.settings
       DJANGO_SECRET_KEY: "ci-test-key-2026"
+      GITHUB_ACTIONS: true
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
     steps:
       - name: Checkout code
@@ -30,7 +32,19 @@ jobs:
       - name: Install Firefox and Geckodriver
         run: |
           sudo apt-get update
-          sudo apt-get install -y firefox-geckodriver
+          sudo apt-get install -y firefox wget tar
+
+          # Download latest geckodriver (stable pinned version)
+          wget -O geckodriver.tar.gz https://github.com/mozilla/geckodriver/releases/download/v0.34.0/geckodriver-v0.34.0-linux64.tar.gz
+          
+          # Extract and install
+          tar -xvzf geckodriver.tar.gz
+          chmod +x geckodriver
+          sudo mv geckodriver /usr/local/bin/
+
+          # Verify installs (helps debugging)
+          firefox --version
+          geckodriver --version
 
       - name: Run Django Tests
         run: |
