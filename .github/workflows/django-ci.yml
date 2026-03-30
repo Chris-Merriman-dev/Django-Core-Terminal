@@ -33,7 +33,7 @@ jobs:
       - name: Install Chrome
         run: |
           sudo apt-get update
-          sudo apt-get install -y wget unzip
+          sudo apt-get install -y wget unzip jq
 
           wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
           sudo apt install -y ./google-chrome-stable_current_amd64.deb
@@ -42,11 +42,17 @@ jobs:
 
       - name: Install Chromedriver
         run: |
+          # Get Chrome major version
           CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d '.' -f 1)
-
           echo "Chrome major version: $CHROME_VERSION"
 
-          wget -O chromedriver.zip https://storage.googleapis.com/chrome-for-testing-public/${CHROME_VERSION}.0/linux64/chromedriver-linux64.zip
+          # Fetch correct chromedriver download URL dynamically
+          DRIVER_URL=$(curl -s https://googlechromelabs.github.io/chrome-for-testing/latest-versions-per-milestone-with-downloads.json \
+            | jq -r --arg v "$CHROME_VERSION" '.milestones[$v].downloads.chromedriver[] | select(.platform=="linux64") | .url')
+
+          echo "Driver URL: $DRIVER_URL"
+
+          wget -O chromedriver.zip "$DRIVER_URL"
 
           unzip chromedriver.zip
           sudo mv chromedriver-linux64/chromedriver /usr/bin/chromedriver
