@@ -45,26 +45,32 @@ class NonMemberUITests(StaticLiveServerTestCase):
     '''
     @classmethod
     def setUpClass(cls):
-        super().setUpClass()
-        options = Options()
+        try:
+            super().setUpClass()
 
-        #if not headless and we are on GitHub Actions, it sets 'GITHUB_ACTIONS' to true automatically
-        if os.environ.get('GITHUB_ACTIONS') or HEADLESS:
-            options.add_argument("--headless")
-            options.add_argument("--width=1920")
-            options.add_argument("--height=1080")
+            from selenium import webdriver
+            from selenium.webdriver.firefox.service import Service
+            from selenium.webdriver.firefox.options import Options
+            import os
 
-        if os.environ.get('GITHUB_ACTIONS'):
-            # This line is the magic: it downloads and paths Geckodriver automatically
-            cls.driver = webdriver.Firefox(
-                service=Service("/usr/local/bin/geckodriver"),
-                options=options
-            )
-        #if we want headless, set it
-        else:
-            cls.driver = webdriver.Firefox(options=options)
+            options = Options()
 
-        cls.driver.implicitly_wait(10)
+            # Always headless in CI or when explicitly requested
+            if os.environ.get("GITHUB_ACTIONS") == "true" or HEADLESS:
+                options.add_argument("--headless")
+                options.add_argument("--width=1920")
+                options.add_argument("--height=1080")
+
+            # Explicit geckodriver service path (CI-safe)
+            service = Service("/usr/local/bin/geckodriver")
+
+            cls.driver = webdriver.Firefox(service=service, options=options)
+
+            # Stable implicit wait for CI
+            cls.driver.implicitly_wait(10)
+        except Exception as e:
+            print("SETUPCLASS FAILED:", e)
+        raise
         
 
 

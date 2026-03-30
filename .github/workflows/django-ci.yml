@@ -12,8 +12,7 @@ jobs:
       PYTHONPATH: ${{ github.workspace }}
       DJANGO_SETTINGS_MODULE: capstone.settings
       DJANGO_SECRET_KEY: "ci-test-key-2026"
-      GITHUB_ACTIONS: true
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+      GITHUB_ACTIONS: "true"
       PYTHONFAULTHANDLER: 1
       DJANGO_DEBUG: "1"
 
@@ -36,10 +35,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y firefox wget tar
 
-          # Download geckodriver
+          # Install geckodriver
           wget -O geckodriver.tar.gz https://github.com/mozilla/geckodriver/releases/download/v0.34.0/geckodriver-v0.34.0-linux64.tar.gz
           
-          # Extract and install
           tar -xvzf geckodriver.tar.gz
           chmod +x geckodriver
           sudo mv geckodriver /usr/local/bin/
@@ -65,4 +63,4 @@ jobs:
       - name: Run Django Tests
         run: |
           python manage.py migrate --noinput
-          python -X faulthandler manage.py test --noinput -v 3 --keepdb
+          python -X faulthandler manage.py test --noinput -v 3 --keepdb --failfast
