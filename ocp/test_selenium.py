@@ -153,11 +153,13 @@ class NonMemberUITests(StaticLiveServerTestCase):
         # open dropdown
         wait.until(EC.element_to_be_clickable((By.ID, "signInDropDown"))).click()
         
-        # click "Sign In"
-        items = self.driver.find_elements(By.CLASS_NAME, "dropdown-item")
+        # Wait for dropdown items to be visible
+        items = wait.until(EC.visibility_of_all_elements_located((By.CLASS_NAME, "dropdown-item")))
+
         for item in items:
-            if "Sign In" in item.get_attribute("textContent"):
-                item.click()   # ✅ FIXED (no JS)
+            if "Sign In" in item.text:
+                wait.until(EC.element_to_be_clickable(item))
+                item.click()
                 break
 
         # fill out form
