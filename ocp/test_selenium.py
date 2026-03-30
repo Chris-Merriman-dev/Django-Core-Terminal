@@ -60,13 +60,15 @@ class NonMemberUITests(StaticLiveServerTestCase):
             options.add_argument("--no-sandbox")
             options.add_argument("--disable-dev-shm-usage")
 
-            # Optional but helpful in CI environments
+            # Additional stability flags (IMPORTANT for CI)
             options.add_argument("--disable-gpu")
+            options.add_argument("--disable-software-rasterizer")
+            options.add_argument("--remote-debugging-port=9222")
 
-            # Explicit Chrome binary path (usually not required, but safe in CI)
+            # Explicit Chrome binary path
             options.binary_location = "/usr/bin/google-chrome"
 
-            # Chromedriver path (you'll install this in CI)
+            # Chromedriver path
             service = Service("/usr/bin/chromedriver")
 
             cls.driver = webdriver.Chrome(service=service, options=options)
