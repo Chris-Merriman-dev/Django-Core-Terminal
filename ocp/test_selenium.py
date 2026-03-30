@@ -85,6 +85,63 @@ class NonMemberUITests(StaticLiveServerTestCase):
         Helper Functions
     '''
 
+    # This will login the user by sending in a username, password, and access_level
+    # Will return the created user to use
+    def login(self, CREATE_USER: bool = True, username: str = "testuser", password: str = "testpassword123", access_level: int = 1) -> Any:
+        
+        if CREATE_USER:
+            # Create a temporary user in the test database
+            User = get_user_model()
+            new_user = User.objects.create_user(
+                username=username, 
+                password=password,
+                access_level=access_level
+            )
+        else:
+            new_user = None
+
+        # Go to the index page
+        self.driver.get(self.live_server_url + reverse('index'))
+        
+        # Increase wait to 15s for slower CI environments
+        wait = WebDriverWait(self.driver, 15)
+
+        # 1. Open the dropdown
+        dropdown_trigger = wait.until(EC.element_to_be_clickable((By.ID, "signInDropDown")))
+        dropdown_trigger.click()
+        
+        # 2. CRITICAL FIX: Wait for the dropdown items to actually be visible/present
+        # Using XPath to find the specific "Sign In" link directly is much faster and more stable
+        try:
+            sign_in_link = wait.until(EC.visibility_of_element_located((By.XPATH, "//a[contains(@class, 'dropdown-item') and contains(text(), 'Sign In')]")))
+            self.driver.execute_script("arguments[0].click();", sign_in_link)
+        except:
+            # Fallback: if XPath fails, try your original loop but with a visibility wait
+            items = wait.until(EC.visibility_of_all_elements_located((By.CLASS_NAME, "dropdown-item")))
+            for item in items:
+                if "Sign In" in item.get_attribute("textContent"):
+                    self.driver.execute_script("arguments[0].click();", item)
+                    break
+
+        # 3. Fill out the information
+        username_field = wait.until(EC.presence_of_element_located((By.NAME, "username")))
+        username_field.clear() # Clear just in case of autofill
+        username_field.send_keys(username)
+        
+        password_field = self.driver.find_element(By.NAME, "password")
+        password_field.clear()
+        password_field.send_keys(password)
+        
+        # 4. Submit it
+        login_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[value='Login']")))
+        self.driver.execute_script("arguments[0].click();", login_button)
+        
+        # 5. Verify we logged on
+        # Wait until dashboard loads so we know the redirect finished
+        wait.until(EC.url_contains('/dashboard'))
+
+        return new_user
+
     #this will login the user by sending in a user name, password and access_level (has defaults)
     #will return the created user to use
     def login2(self, CREATE_USER : bool = True, username : str = "testuser", password : str = "testpassword123", access_level : int = 1)->Any:
@@ -133,7 +190,7 @@ class NonMemberUITests(StaticLiveServerTestCase):
     
     # this will login the user by sending in a user name, password and access_level (has defaults)
     # will return the created user to use
-    def login(self, CREATE_USER: bool = True, username: str = "testuser", password: str = "testpassword123", access_level: int = 1) -> Any:
+    def logingpt(self, CREATE_USER: bool = True, username: str = "testuser", password: str = "testpassword123", access_level: int = 1) -> Any:
         
         if CREATE_USER:
             # create a temporary user in the test database
