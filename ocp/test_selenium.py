@@ -169,9 +169,12 @@ class NonMemberUITests(StaticLiveServerTestCase):
     def create_users(self, max_users : int = 1, name : str = "user", pw : str = "123", access_level : int = 1)->list:
         the_users = []
 
+        wait = WebDriverWait(self.driver, 10)
+
         for i in range(max_users):
             #pause before we begin
-            time.sleep(1)
+            #time.sleep(1)
+            wait.until(lambda d: True)
 
             #setup our maxxed out user and create
             new_name = f"{name}{i}"
@@ -184,8 +187,10 @@ class NonMemberUITests(StaticLiveServerTestCase):
                                 )
 
             #sleep then logout
-            time.sleep(1)
+            #time.sleep(1)
+            wait.until(EC.url_contains("/dashboard"))
             self.logout()
+            wait.until(EC.url_contains("/"))
 
             #now add the user to our list
             the_users.append(new_user)
@@ -209,8 +214,10 @@ class NonMemberUITests(StaticLiveServerTestCase):
 
 
         #sleep then logout
-        time.sleep(1)
+        #time.sleep(1)
+        wait.until(EC.url_contains("/dashboard"))
         self.logout()
+        wait.until(EC.url_contains("/"))
 
         #users to be created, make sure its 2 under the access level
         #example: 5 - 2 = 3. We only need 3 users because they will all start at 1 and can only go to 2, 3 and 4. Never the same access level as the user, this case 5.
@@ -219,7 +226,7 @@ class NonMemberUITests(StaticLiveServerTestCase):
 
         #now create user_num of users to test and sleep
         the_users = self.create_users(max_users=user_num)
-        time.sleep(1)
+        #time.sleep(1)
 
         #login our level 5 user
         self.login(         
@@ -255,7 +262,10 @@ class NonMemberUITests(StaticLiveServerTestCase):
         search_box.send_keys(Keys.ENTER)
 
         #wait for load
-        time.sleep(1)
+        #time.sleep(1)
+        WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "#personnelTable tbody"))
+        )
 
         #now see if we can find it
         #self.assertIn(target_name.upper(), self.driver.page_source.upper())
@@ -572,7 +582,7 @@ class NonMemberUITests(StaticLiveServerTestCase):
             self.assertIn("Error", self.driver.page_source)
 
             #sleep
-            time.sleep(1)
+            #time.sleep(1)
 
     #run login and then run logout
     @unittest.skipUnless(RUN_SELENIUM_TESTS, "SELENIUM tests are currently disabled")
@@ -747,12 +757,12 @@ class NonMemberUITests(StaticLiveServerTestCase):
             self.assertIn(f"LEVEL {i}:", self.driver.page_source)
 
             #pause then logout
-            time.sleep(1)
+            #time.sleep(1)
             self.logout()
 
             #if we need to pause for next loop
-            if i < max_acces_level:
-                time.sleep(1)
+            #if i < max_acces_level:
+            #    time.sleep(1)
 
     #test user menu user profile
     @unittest.skipUnless(RUN_SELENIUM_TESTS, "SELENIUM tests are currently disabled")
@@ -805,8 +815,10 @@ class NonMemberUITests(StaticLiveServerTestCase):
 
 
         #sleep then logout
-        time.sleep(1)
+        #time.sleep(1)
+        wait.until(EC.url_contains("/dashboard"))
         self.logout()
+        wait.until(EC.url_contains("/"))
 
         #users to be created, make sure its 2 under the access level
         #example: 5 - 2 = 3. We only need 3 users because they will all start at 1 and can only go to 2, 3 and 4. Never the same access level as the user, this case 5.
@@ -815,7 +827,7 @@ class NonMemberUITests(StaticLiveServerTestCase):
 
         #now create user_num of users to test and sleep
         the_users = self.create_users(max_users=user_num)
-        time.sleep(1)
+        #time.sleep(1)
 
         #login our level 5 user
         self.login(         
@@ -824,6 +836,8 @@ class NonMemberUITests(StaticLiveServerTestCase):
                             password=user_pw,
                             access_level=user_access_level
                     )
+        
+        wait.until(EC.url_contains("/dashboard"))
         
         #now goto our secutiry settings
         self.click_navigation(
