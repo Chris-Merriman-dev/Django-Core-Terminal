@@ -23,6 +23,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException
 
+from selenium.webdriver.firefox.service import Service
+from webdriver_manager.firefox import GeckoDriverManager
+
 from typing import Any
 import time
 import unittest
@@ -56,7 +59,12 @@ class NonMemberUITests(StaticLiveServerTestCase):
             options.add_argument("--width=1920")
             options.add_argument("--height=1080")
         
-        cls.driver = webdriver.Firefox(options=options)
+        #cls.driver = webdriver.Firefox(options=options)
+        # This line is the magic: it downloads and paths Geckodriver automatically
+        cls.driver = webdriver.Firefox(
+            service=Service(GeckoDriverManager().install()), 
+            options=options
+        )
         cls.driver.implicitly_wait(10)
 
     @classmethod
