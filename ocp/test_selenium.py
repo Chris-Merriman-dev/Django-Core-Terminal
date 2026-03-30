@@ -84,8 +84,56 @@ class NonMemberUITests(StaticLiveServerTestCase):
     '''
         Helper Functions
     '''
-
     def login(self, CREATE_USER: bool = True, username: str = "testuser", password: str = "testpassword123", access_level: int = 1) -> Any:
+        if CREATE_USER:
+            User = get_user_model()
+            new_user = User.objects.create_user(
+                username=username, 
+                password=password,
+                access_level=access_level
+            )
+        else:
+            new_user = None
+
+        # 1. ENSURE A CLEAN SLATE
+        self.driver.delete_all_cookies() 
+        self.driver.get(self.live_server_url + reverse('login'))
+        
+        wait = WebDriverWait(self.driver, 15)
+        
+        # 2. Form Handling
+        user_field = wait.until(EC.element_to_be_clickable((By.NAME, "username")))
+        user_field.clear()
+        user_field.send_keys(username)
+        
+        pass_field = self.driver.find_element(By.NAME, "password")
+        pass_field.clear()
+        pass_field.send_keys(password)
+        
+        # 3. Use a standard click first. Only use JS if standard fails.
+        login_btn = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[value='Login']")))
+        
+        # Explicitly scroll to the button to ensure it's in view (for headless mode stability)
+        self.driver.execute_script("arguments[0].scrollIntoView(true);", login_btn)
+        login_btn.click() 
+        
+        # 4. STABILITY WAIT
+        try:
+            # Check for the dashboard URL
+            wait.until(EC.url_contains('/dashboard'))
+        except TimeoutException:
+            # Check if there is an error message on the page
+            # This helps us know WHY Django rejected it
+            try:
+                error_msg = self.driver.find_element(By.CLASS_NAME, "alert-danger").text
+                print(f"\n[DJANGO ERROR]: {error_msg}")
+            except:
+                print("\n[DEBUG] No visible error message found on login page.")
+                
+            actual_url = self.driver.current_url
+            raise TimeoutException(f"Login redirect failed. Ended up at: {actual_url}")
+
+    def login6(self, CREATE_USER: bool = True, username: str = "testuser", password: str = "testpassword123", access_level: int = 1) -> Any:
         if CREATE_USER:
             User = get_user_model()
             new_user = User.objects.create_user(
