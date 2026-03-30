@@ -87,7 +87,7 @@ class NonMemberUITests(StaticLiveServerTestCase):
 
     #this will login the user by sending in a user name, password and access_level (has defaults)
     #will return the created user to use
-    def login(self, CREATE_USER : bool = True, username : str = "testuser", password : str = "testpassword123", access_level : int = 1)->Any:
+    def login2(self, CREATE_USER : bool = True, username : str = "testuser", password : str = "testpassword123", access_level : int = 1)->Any:
         
         if CREATE_USER:
             #create a temporary user in the test database
@@ -128,6 +128,54 @@ class NonMemberUITests(StaticLiveServerTestCase):
 
         #wait until dashboard loads so we know we are logged on
         wait.until(EC.url_contains('/dashboard'))
+
+        return new_user
+    
+    # this will login the user by sending in a user name, password and access_level (has defaults)
+    # will return the created user to use
+    def login(self, CREATE_USER: bool = True, username: str = "testuser", password: str = "testpassword123", access_level: int = 1) -> Any:
+        
+        if CREATE_USER:
+            # create a temporary user in the test database
+            User = get_user_model()
+            new_user = User.objects.create_user(
+                username=username,
+                password=password,
+                access_level=access_level
+            )
+        else:
+            new_user = None
+
+        # go to the index page
+        self.driver.get(self.live_server_url + reverse('index'))
+        wait = WebDriverWait(self.driver, 10)
+
+        # open dropdown
+        wait.until(EC.element_to_be_clickable((By.ID, "signInDropDown"))).click()
+        
+        # click "Sign In"
+        items = self.driver.find_elements(By.CLASS_NAME, "dropdown-item")
+        for item in items:
+            if "Sign In" in item.get_attribute("textContent"):
+                item.click()   # ✅ FIXED (no JS)
+                break
+
+        # fill out form
+        wait.until(EC.presence_of_element_located((By.NAME, "username"))).send_keys(username)
+        self.driver.find_element(By.NAME, "password").send_keys(password)
+        
+        # submit form
+        login_button = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[value='Login']")))
+        login_button.click()   # ✅ FIXED (no JS)
+
+        # DEBUG INFO
+        print("AFTER LOGIN CLICK URL:", self.driver.current_url)
+
+        # wait for redirect (more reliable)
+        wait = WebDriverWait(self.driver, 10)
+        wait.until(lambda driver: "/dashboard" in driver.current_url)
+
+        print("FINAL URL:", self.driver.current_url)
 
         return new_user
 
