@@ -1,3 +1,24 @@
+# Django-Core Full-Stack Terminal
+### Full-Stack AI Operations & Security Management Suite
+
+This project was developed as the **Capstone Final Project for Harvard University's CS50W: Web Programming with Python and JavaScript**. 
+
+The following documentation outlines the architecture, logic, and testing protocols required to satisfy the course's "Distinctiveness and Complexity" standards. It serves as a comprehensive demonstration of full-stack engineering, featuring a custom-built terminal interface, multi-tier Role-Based Access Control (RBAC), and asynchronous integration with local LLM and Vision models.
+
+---
+
+## 📺 Video Demonstrations
+
+To see the **Django-Core Full-Stack Terminal** in action, including the integrated AI workflows and automated testing suite, please view the demonstrations below:
+
+### 🤖 Core System & AI Integration
+**[Watch the System Overview](https://www.youtube.com/watch?v=aV-RZuVNV5U)** *This video demonstrates the terminal interface, the 5-tier security clearance system, and real-time asynchronous communication with Llama 3.1 and Flux .1.*
+
+### 🧪 Automated Testing & QA Validation
+**[Watch the Test Execution](https://www.youtube.com/watch?v=INaGrY5kSoY)** *A live demonstration of the automated testing suite. This video showcases **32+ Selenium and Django TestCase** suites running in real-time to validate frontend interactivity, backend logic, and system-wide security protocols.*
+
+---
+
 # OCP Management Portal
 ### CS50W Final Project - Capstone
 

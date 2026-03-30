@@ -10,15 +10,12 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    services:
-      # If you use PostgreSQL, add it here. Otherwise, SQLite is built-in.
-      
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
     - name: Set up Python
-      uses: actions/checkout@v4
+      uses: actions/setup-python@v4
       with:
         python-version: '3.12'
 
@@ -36,6 +33,6 @@ jobs:
       run: |
         python manage.py test
       env:
-        # If your tests need secret keys or AI API endpoints, 
-        # add them to GitHub Secrets and reference them here.
-        DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
+        # These allow Selenium to run "headless" (no actual window pops up)
+        DJANGO_SETTINGS_MODULE: capstone.settings
+        PYTHONPATH: .
