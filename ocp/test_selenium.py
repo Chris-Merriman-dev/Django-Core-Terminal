@@ -49,7 +49,9 @@ class NonMemberUITests(StaticLiveServerTestCase):
         try:
             super().setUpClass()
 
-            
+            # Force headless mode in CI
+            if os.environ.get("GITHUB_ACTIONS") == "true" or HEADLESS:
+                os.environ["MOZ_HEADLESS"] = "1"
 
             options = Options()
 
@@ -62,12 +64,15 @@ class NonMemberUITests(StaticLiveServerTestCase):
                 options.add_argument("--no-sandbox")
                 options.add_argument("--disable-dev-shm-usage")
 
+            # Explicit Firefox binary path (important on Ubuntu runners)
+            options.binary_location = "/usr/bin/firefox"
+
             service = Service("/usr/local/bin/geckodriver")
 
             cls.driver = webdriver.Firefox(service=service, options=options)
 
-            # Stable implicit wait for CI
             cls.driver.implicitly_wait(10)
+
         except Exception as e:
             print("SETUPCLASS FAILED:", e)
             raise
