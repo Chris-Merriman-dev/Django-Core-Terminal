@@ -84,7 +84,64 @@ class NonMemberUITests(StaticLiveServerTestCase):
     '''
         Helper Functions
     '''
+
     def login(self, CREATE_USER: bool = True, username: str = "testuser", password: str = "testpassword123", access_level: int = 1) -> Any:
+        # 1. Database Setup
+        if CREATE_USER:
+            User = get_user_model()
+            new_user, created = User.objects.get_or_create(username=username)
+            new_user.set_password(password)
+            new_user.access_level = access_level
+            new_user.save()
+        else:
+            new_user = None
+
+        # 2. THE CRITICAL RESET: Delete cookies on a neutral page
+        # We go to a non-existent page on our domain to safely wipe cookies
+        self.driver.get(self.live_server_url + "/404-reset/")
+        self.driver.delete_all_cookies()
+
+        # 3. Get the login page FRESH (This generates a brand new CSRF token)
+        self.driver.get(self.live_server_url + reverse('login'))
+        
+        wait = WebDriverWait(self.driver, 15)
+        
+        # 4. Wait for the CSRF cookie to actually exist before interacting
+        # Headless Chrome in GitHub Actions can sometimes lag here
+        wait.until(lambda d: d.get_cookie('csrftoken') is not None)
+
+        # 5. Form Handling
+        user_field = wait.until(EC.element_to_be_clickable((By.NAME, "username")))
+        user_field.clear()
+        user_field.send_keys(username)
+        
+        pass_field = self.driver.find_element(By.NAME, "password")
+        pass_field.clear()
+        pass_field.send_keys(password)
+        
+        # 6. Submit with a small "Headless Stability" scroll
+        login_btn = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[value='Login']")))
+        self.driver.execute_script("arguments[0].scrollIntoView(true);", login_btn)
+        
+        # Use a standard click, fallback to JS if it fails
+        try:
+            login_btn.click()
+        except:
+            self.driver.execute_script("arguments[0].click();", login_btn)
+        
+        # 7. Verification
+        try:
+            wait.until(EC.url_contains('/dashboard'))
+        except TimeoutException:
+            actual_url = self.driver.current_url
+            # Check for a generic error message in the page text
+            page_text = self.driver.find_element(By.TAG_NAME, "body").text
+            print(f"\n[DEBUG] Stuck at {actual_url}. Page content: {page_text[:150]}")
+            raise TimeoutException(f"Login redirect failed. Ended up at: {actual_url}")
+
+        return new_user
+    
+    def login9(self, CREATE_USER: bool = True, username: str = "testuser", password: str = "testpassword123", access_level: int = 1) -> Any:
         # 1. DATABASE WORK FIRST
         if CREATE_USER:
             User = get_user_model()
