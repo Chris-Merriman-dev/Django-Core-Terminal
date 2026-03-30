@@ -96,6 +96,49 @@ class NonMemberUITests(StaticLiveServerTestCase):
         else:
             new_user = None
 
+        # 1. BYPASS THE DROPDOWN: Go directly to the login page
+        # This is the industry standard for stable E2E testing
+        self.driver.get(self.live_server_url + reverse('login'))
+        
+        wait = WebDriverWait(self.driver, 15)
+        
+        # 2. Ensure the form is actually there
+        try:
+            user_field = wait.until(EC.presence_of_element_located((By.NAME, "username")))
+        except TimeoutException:
+            # If the direct URL fails, the server might be lagging—try one refresh
+            self.driver.refresh()
+            user_field = wait.until(EC.presence_of_element_located((By.NAME, "username")))
+
+        # 3. Fill out the form
+        user_field.clear()
+        user_field.send_keys(username)
+        
+        pass_field = self.driver.find_element(By.NAME, "password")
+        pass_field.clear()
+        pass_field.send_keys(password)
+        
+        # 4. Use the ID or Name for the button if possible, 
+        # but your CSS Selector works too. 
+        login_btn = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[value='Login']")))
+        self.driver.execute_script("arguments[0].click();", login_btn)
+        
+        # 5. Wait for redirect to confirm success
+        wait.until(EC.url_contains('/dashboard'))
+
+        return new_user
+
+    def login4(self, CREATE_USER: bool = True, username: str = "testuser", password: str = "testpassword123", access_level: int = 1) -> Any:
+        if CREATE_USER:
+            User = get_user_model()
+            new_user = User.objects.create_user(
+                username=username, 
+                password=password,
+                access_level=access_level
+            )
+        else:
+            new_user = None
+
         # 1. Force navigation and wait for body to ensure page is ready
         self.driver.get(self.live_server_url + reverse('index'))
         wait = WebDriverWait(self.driver, 15)
