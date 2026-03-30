@@ -2,37 +2,38 @@ name: Django CI/CD Pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - main
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - main
 
 jobs:
   test:
     runs-on: ubuntu-latest
+    env:
+      CI: true
+      DJANGO_SECRET_KEY: "temporary-key-for-testing"
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.12'
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
 
-    - name: Install Dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-    - name: Setup Chrome for Selenium
-      uses: browser-actions/setup-chrome@latest
-      with:
-        chrome-version: stable
+      - name: Setup Chrome for Selenium
+        uses: browser-actions/setup-chrome@latest
+        with:
+          chrome-version: stable
 
-    - name: Run Django Tests
-      run: |
-        python manage.py test
-      env:
-        # These allow Selenium to run "headless" (no actual window pops up)
-        DJANGO_SETTINGS_MODULE: capstone.settings
-        PYTHONPATH: .
+      - name: Run Django Tests
+        run: |
+          python manage.py test --noinput
