@@ -90,7 +90,7 @@ class NonMemberUITests(StaticLiveServerTestCase):
         Helper Functions
     '''
 
-    def login(
+    def loginworks(
         self,
         CREATE_USER: bool = True,
         username: str = "testuser",
@@ -98,7 +98,7 @@ class NonMemberUITests(StaticLiveServerTestCase):
         access_level: int = 1
     ) -> Any:
 
-        
+        #resets the browser session state for the driver
         self.driver.delete_all_cookies()
         self.driver.get("about:blank")
 
@@ -632,7 +632,11 @@ class NonMemberUITests(StaticLiveServerTestCase):
 
     #this will login the user by sending in a user name, password and access_level (has defaults)
     #will return the created user to use
-    def login2(self, CREATE_USER : bool = True, username : str = "testuser", password : str = "testpassword123", access_level : int = 1)->Any:
+    def login(self, CREATE_USER : bool = True, username : str = "testuser", password : str = "testpassword123", access_level : int = 1)->Any:
+        
+        #resets the browser session state for the driver
+        self.driver.delete_all_cookies()
+        self.driver.get("about:blank")
         
         if CREATE_USER:
             #create a temporary user in the test database
