@@ -1,5 +1,5 @@
 # Django-Core Full-Stack Terminal
-### Full-Stack AI Operations & Security Management Suite
+### Django Backend Authentication & RBAC System
 
 This project was developed as the **Capstone Final Project for Harvard University's CS50W: Web Programming with Python and JavaScript**. 
 
